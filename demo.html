@@ -295,7 +295,6 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   .inc-row{grid-template-columns:1fr 1fr auto}
   /* Table: allow horizontal scroll */
   .tcard{overflow-x:auto}
-  table{min-width:500px}
   /* Modal full width */
   .modal{max-width:100%;border-radius:16px}
   /* Toast above bottom nav */
@@ -316,6 +315,28 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   .future-controls{grid-template-columns:1fr}
   .kv{font-size:17px}
   .pgrid{grid-template-columns:1fr 1fr}
+}
+
+/* ─── RESPONSIVE CHARTS ─── */
+.chart-wrap{position:relative;width:100%;height:190px}
+.chart-wrap.chart-sm{height:150px}
+.chart-wrap.chart-lg{height:240px}
+.chart-wrap canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+@media(max-width:768px){
+  .chart-wrap{height:180px}
+  .chart-wrap.chart-sm{height:160px}
+  .chart-wrap.chart-lg{height:220px}
+  /* stack g3 charts to single col */
+  .g3.mb{grid-template-columns:1fr}
+  /* platform table: hide less important cols */
+  table th:nth-child(4),table td:nth-child(4),
+  table th:nth-child(5),table td:nth-child(5),
+  table th:nth-child(6),table td:nth-child(6){display:none}
+  table{min-width:0;width:100%}
+}
+@media(max-width:420px){
+  .chart-wrap{height:160px}
+  .chart-wrap.chart-sm{height:140px}
 }
 </style>
 </head>
@@ -399,14 +420,14 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
         <div class="ct">Evolução da Carteira</div>
         <div style="display:flex;gap:5px" id="evoFilters"></div>
       </div>
-      <div style="height:190px"><canvas id="cEvo"></canvas></div>
+      <div class="chart-wrap"><canvas id="cEvo"></canvas></div>
     </div>
-    <div class="card"><div class="ct">Distribuição</div><div style="height:190px"><canvas id="cCatPie"></canvas></div></div>
+    <div class="card"><div class="ct">Distribuição</div><div class="chart-wrap"><canvas id="cCatPie"></canvas></div></div>
   </div>
   <div class="g3 mb">
-    <div class="card"><div class="ct">Investido por Mês</div><div style="height:150px"><canvas id="cBar"></canvas></div></div>
-    <div class="card"><div class="ct">Por Plataforma</div><div style="height:150px"><canvas id="cPlatPie"></canvas></div></div>
-    <div class="card"><div class="ct">% Poupança</div><div style="height:150px"><canvas id="cSav"></canvas></div></div>
+    <div class="card"><div class="ct">Investido por Mês</div><div class="chart-wrap chart-sm"><canvas id="cBar"></canvas></div></div>
+    <div class="card"><div class="ct">Por Plataforma</div><div class="chart-wrap chart-sm"><canvas id="cPlatPie"></canvas></div></div>
+    <div class="card"><div class="ct">% Poupança</div><div class="chart-wrap chart-sm"><canvas id="cSav"></canvas></div></div>
   </div>
   <!-- Platform table -->
   <div class="tcard">
@@ -535,7 +556,7 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
       <!-- Chart -->
       <div class="card">
         <div class="ct">Evolução projetada · metas e FIRE assinalados</div>
-        <div style="height:240px"><canvas id="cFuturo"></canvas></div>
+        <div class="chart-wrap chart-lg"><canvas id="cFuturo"></canvas></div>
       </div>
       <!-- Table -->
       <div class="tcard" id="projTableWrap">
@@ -936,7 +957,7 @@ function renderPlatDetail(pid){
     </div>
     <div class="card">
       <div class="ct">${p.name} — evolução do valor</div>
-      <div style="height:200px"><canvas id="cPlatDet"></canvas></div>
+      <div class="chart-wrap"><canvas id="cPlatDet"></canvas></div>
     </div>
     <div class="tcard">
       <div class="th2"><div class="ttl">Histórico de entradas</div></div>
