@@ -333,6 +333,12 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   table th:nth-child(5),table td:nth-child(5),
   table th:nth-child(6),table td:nth-child(6){display:none}
   table{min-width:0;width:100%}
+  /* cat strip: horizontal scroll carousel */
+  .cat-strip{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;padding-bottom:4px;gap:10px;
+    scrollbar-width:none;-ms-overflow-style:none}
+  .cat-strip::-webkit-scrollbar{display:none}
+  .ccat{flex:0 0 140px;scroll-snap-align:start;min-width:140px}
 }
 @media(max-width:420px){
   .chart-wrap{height:160px}
@@ -810,7 +816,7 @@ function renderDash(){
   if(lastP)PLATS().forEach(p=>{catTotals[p.cat]=(catTotals[p.cat]||0)+(lastP.platforms[p.id]||0);});
   const grand=Object.values(catTotals).reduce((a,b)=>a+b,0)||1;
   const strip=document.getElementById('catStrip');
-  if(strip){strip.style.gridTemplateColumns=`repeat(${CATS().length},1fr)`;strip.innerHTML=CATS().map(c=>`<div class="ccat" style="--c:${c.color}"><div class="ccl">${c.label}</div><div class="ccv">${fEUR(catTotals[c.id]||0)}</div><div class="ccs">${((catTotals[c.id]||0)/grand*100).toFixed(1)}%</div></div>`).join('');}
+  if(strip){if(window.innerWidth>768)strip.style.gridTemplateColumns=`repeat(${CATS().length},1fr)`;else strip.style.gridTemplateColumns='';strip.innerHTML=CATS().map(c=>`<div class="ccat" style="--c:${c.color}"><div class="ccl">${c.label}</div><div class="ccv">${fEUR(catTotals[c.id]||0)}</div><div class="ccs">${((catTotals[c.id]||0)/grand*100).toFixed(1)}%</div></div>`).join('');}
 
   // Evo filters
   if(activeCats.size===0)CATS().forEach(c=>activeCats.add(c.id));
