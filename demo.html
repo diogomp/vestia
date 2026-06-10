@@ -256,6 +256,34 @@ input:focus,select:focus{border-color:var(--ac)}
   border:1px solid var(--bd2);background:transparent;color:var(--mu2);font-family:var(--sa);transition:all .15s}
 .chip:hover{border-color:var(--ac);color:var(--ac)}.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
 
+/* ─── PLATFORM CARDS ─── */
+.plat-cards-list{display:flex;flex-direction:column;gap:8px;align-self:start}
+.plat-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .18s;border-left:3px solid var(--c,var(--bd));position:relative}
+.plat-card:hover{border-left-color:var(--c,var(--ac));background:var(--sf2s)}
+.plat-card.active{border-left-color:var(--c,var(--ac));background:var(--sf2s)}
+.plat-card-cta{display:none}
+.plat-card-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.plat-card-cat{font-size:10px;color:var(--mu2);margin-bottom:10px}
+.plat-card-val{font-family:var(--mo);font-size:20px;font-weight:500;margin-bottom:3px}
+.plat-card-change{font-size:11px}
+.plat-card-spark{height:40px;margin-top:8px;position:relative}
+.plat-card-bar{display:flex;align-items:center;gap:6px;margin-top:10px}
+.plat-card-bar-fill{height:4px;border-radius:2px;flex:1;background:var(--bd2)}
+.plat-card-bar-inner{height:100%;border-radius:2px;transition:width .5s}
+@media(max-width:768px){.plat-cards-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.plat-cards-grid{grid-template-columns:1fr}}
+
+/* ─── ASSET ACCORDION ─── */
+.asset-row td{transition:background .15s}
+.asset-row:hover td{background:var(--sf2s)!important}
+.asset-row td:first-child{border-left:3px solid transparent;transition:border-color .15s}
+.asset-row:hover td:first-child{border-left-color:var(--ac)}
+.asset-row.open td:first-child{border-left-color:var(--ac)}
+.arow-expand-inner{border-left:3px solid var(--ac)}
+.asset-expand-hint{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:var(--sf2s);border:1px solid var(--bd2);font-size:11px;color:var(--mu2);transition:all .2s;flex-shrink:0}
+.asset-row:hover .asset-expand-hint{border-color:var(--ac);color:var(--ac)}
+.asset-row.open .asset-expand-hint{background:var(--ac);border-color:var(--ac);color:#fff;transform:rotate(90deg)}
+
 /* ─── TOAST ─── */
 .toast{position:fixed;bottom:80px;right:20px;background:var(--sf);border:1px solid var(--gn);
   border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--gn);
@@ -287,10 +315,10 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   .plat-layout{grid-template-columns:1fr}
   /* Future layout: stack */
   .future-layout{grid-template-columns:1fr}
-  /* Platform list becomes horizontal scroll */
-  .plat-list{display:flex;overflow-x:auto;border-radius:var(--r)}
-  .plat-list-item{flex-shrink:0;border-bottom:none;border-right:1px solid var(--bd)}
-  .plat-list-item.on{border-left:none;border-bottom:2px solid var(--ac)}
+  /* Platform cards on mobile: stack */
+  .plat-layout{grid-template-columns:1fr}
+  .plat-cards-list{flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:4px}
+  .plat-card{flex-shrink:0;min-width:160px}
   /* Income rows: 2 cols */
   .inc-row{grid-template-columns:1fr 1fr auto}
   /* Table: allow horizontal scroll */
@@ -344,6 +372,10 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   .chart-wrap{height:160px}
   .chart-wrap.chart-sm{height:140px}
 }
+
+.entry-step-dot{width:24px;height:24px;border-radius:50%;background:var(--bd2);border:2px solid var(--bd2);flex-shrink:0;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--mu)}
+.entry-step-dot.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.entry-step-dot.done{background:var(--gn);border-color:var(--gn);color:#fff}
 </style>
 </head>
 <body>
@@ -354,13 +386,13 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   <div class="sb-nav">
     <div class="ni on" onclick="nav('dashboard',this)"><span>◈</span> Dashboard</div>
     <div class="ni" onclick="nav('entrada',this)"><span>＋</span> New Entry</div>
-    <div class="ni" onclick="nav('historico',this)"><span>≡</span> Histórico</div>
-    <div class="ni-sep">Análise</div>
-    <div class="ni" onclick="nav('plataformas',this)"><span>↗</span> Plataformas</div>
-    <div class="ni" onclick="nav('metas',this)"><span>◎</span> Metas</div>
-    <div class="ni" onclick="nav('futuro',this)"><span>→</span> Futuro</div>
-    <div class="ni-sep">Config</div>
-    <div class="ni" onclick="nav('opcoes',this)"><span>⚙</span> Opções</div>
+    <div class="ni" onclick="nav('historico',this)"><span>≡</span> History</div>
+    <div class="ni-sep" data-i18n-sep="analysis">Analysis</div>
+    <div class="ni" onclick="nav('plataformas',this)"><span>↗</span> Platforms</div>
+    <div class="ni" onclick="nav('assets',this)"><span>◆</span> Assets</div>
+    <div class="ni" onclick="nav('futuro',this)"><span>→</span> Future</div>
+    <div class="ni-sep" data-i18n-sep="config">Config</div>
+    <div class="ni" onclick="nav('opcoes',this)"><span>⚙</span> Options</div>
   </div>
   <div class="sb-btm">
     <button class="io-btn g" onclick="exportData()"><span>↑</span> Exportar JSON</button>
@@ -382,7 +414,10 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
     <div class="bni-icon">≡</div><div class="bni-label">History</div>
   </div>
   <div class="bni" id="bni-plataformas" onclick="navTo('plataformas')">
-    <div class="bni-icon">↗</div><div class="bni-label">Assets</div>
+    <div class="bni-icon">↗</div><div class="bni-label">Platforms</div>
+  </div>
+  <div class="bni" id="bni-assets" onclick="navTo('assets')">
+    <div class="bni-icon">◆</div><div class="bni-label">Assets</div>
   </div>
   <div class="bni" id="bni-futuro" onclick="navTo('futuro')">
     <div class="bni-icon">→</div><div class="bni-label">Future</div>
@@ -397,18 +432,64 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
   <div class="ph">
     <div><div class="pt" id="dash-title">Portfolio</div><div class="ps" id="dash-sub">—</div></div>
   </div>
-  <div id="dash-alert" style="display:none" class="alert">
+
+  <!-- Alert: no entry for a while -->
+  <div id="dash-alert" style="display:none" class="alert mb">
     <span id="dash-alert-text">—</span>
-    <button class="btn btn-sm" onclick="nav('entrada',document.querySelectorAll('.ni')[1])">+ Entrada</button>
+    <button class="btn btn-sm" onclick="nav('entrada',document.querySelectorAll('.ni')[1])">+ Entry</button>
   </div>
-  <!-- KPI row -->
-  <div class="g5 mb" id="kpiGrid">
-    <div class="kpi ac"><div class="kl">Valor Atual</div><div class="kv" id="k-total">—</div><div class="ks" id="k-tsub">—</div></div>
-    <div class="kpi"><div class="kl">Total Investido</div><div class="kv" id="k-inv">—</div><div class="ks">capital próprio</div></div>
-    <div class="kpi gn"><div class="kl">Ganho</div><div class="kv" id="k-gain">—</div><div class="ks" id="k-gainpct">—</div></div>
-    <div class="kpi"><div class="kl">Variação Mês</div><div class="kv" id="k-var">—</div><div class="ks">vs anterior</div></div>
-    <div class="kpi am"><div class="kl">% Poupança Média</div><div class="kv" id="k-sav">—</div><div class="ks" id="k-savtrend">—</div></div>
+
+  <!-- Hero KPI row: most important numbers first -->
+  <div class="g2 mb" style="gap:12px">
+    <div class="kpi ac" style="padding:22px 24px">
+      <div class="kl">Current Value</div>
+      <div class="kv" id="k-total" style="font-size:28px;letter-spacing:-.02em">—</div>
+      <div class="ks" id="k-tsub" style="margin-top:6px">—</div>
+    </div>
+    <div class="kpi gn" style="padding:22px 24px">
+      <div class="kl">Total Return</div>
+      <div class="kv" id="k-gain" style="font-size:28px;letter-spacing:-.02em">—</div>
+      <div class="ks" id="k-gainpct" style="margin-top:6px">—</div>
+    </div>
   </div>
+
+  <!-- Feedback / celebration card -->
+  <div id="dash-feedback" style="display:none;border:1px solid var(--gn);border-radius:12px;padding:13px 16px;margin-bottom:14px;background:rgba(0,217,126,.05)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:24px;line-height:1" id="fb-icon">🎉</div>
+      <div>
+        <div style="font-size:13px;font-weight:700" id="fb-title">—</div>
+        <div style="font-size:11px;color:var(--mu2);margin-top:2px" id="fb-sub">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secondary KPIs -->
+  <div class="g3 mb" style="gap:10px">
+    <div class="kpi"><div class="kl">Total Invested</div><div class="kv" id="k-inv">—</div><div class="ks">own capital</div></div>
+    <div class="kpi"><div class="kl">This Month</div><div class="kv" id="k-var">—</div><div class="ks" id="k-varsub">vs previous</div></div>
+    <div class="kpi am"><div class="kl">Avg. Savings Rate</div><div class="kv" id="k-sav">—</div><div class="ks" id="k-savtrend">—</div></div>
+  </div>
+
+  <!-- FIRE callout -->
+  <div id="fire-callout" style="display:none;background:linear-gradient(135deg,rgba(0,217,126,.08),rgba(99,112,255,.08));border:1px solid rgba(0,217,126,.25);border-radius:14px;padding:16px 20px;margin-bottom:16px;cursor:pointer" onclick="nav('futuro',document.querySelectorAll('.ni')[6])">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gn);margin-bottom:4px">🔥 FIRE Projection</div>
+        <div style="font-size:14px;font-weight:600" id="fire-callout-txt">—</div>
+        <div style="font-size:11px;color:var(--mu2);margin-top:2px" id="fire-callout-sub">—</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--mo);font-size:22px;font-weight:500;color:var(--gn)" id="fire-callout-yr">—</div>
+        <div style="font-size:10px;color:var(--mu2)">target year</div>
+      </div>
+    </div>
+    <div class="pb-wrap" style="margin-top:10px">
+      <div class="pb-labels"><span style="font-size:10px;color:var(--mu2)" id="fire-callout-pctlbl">—</span><span style="font-size:10px;color:var(--gn);font-weight:700" id="fire-callout-pct">—</span></div>
+      <div class="pb"><div class="pb-fill" id="fire-callout-fill" style="width:0%;background:linear-gradient(90deg,var(--gn),var(--ac))"></div></div>
+    </div>
+  </div>
+
   <!-- Main goal progress -->
   <div id="goal-banner" style="display:none" class="card mb">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
@@ -417,28 +498,35 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
     </div>
     <div class="pb"><div class="pb-fill" id="gb-fill" style="width:0%;background:linear-gradient(90deg,var(--ac),var(--gn))"></div></div>
   </div>
+
   <!-- Category strip -->
   <div class="cat-strip mb" id="catStrip"></div>
-  <!-- Charts -->
-  <div class="g2 mb">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div class="ct">Evolução da Carteira</div>
-        <div style="display:flex;gap:5px" id="evoFilters"></div>
-      </div>
-      <div class="chart-wrap"><canvas id="cEvo"></canvas></div>
+
+  <!-- Evolution chart — full width, prominent -->
+  <div class="card mb">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="ct">Portfolio Evolution</div>
+      <div style="display:flex;gap:5px" id="evoFilters"></div>
     </div>
-    <div class="card"><div class="ct">Distribuição</div><div class="chart-wrap"><canvas id="cCatPie"></canvas></div></div>
+    <div class="chart-wrap" style="height:220px"><canvas id="cEvo"></canvas></div>
   </div>
-  <div class="g3 mb">
-    <div class="card"><div class="ct">Investido por Mês</div><div class="chart-wrap chart-sm"><canvas id="cBar"></canvas></div></div>
-    <div class="card"><div class="ct">Por Plataforma</div><div class="chart-wrap chart-sm"><canvas id="cPlatPie"></canvas></div></div>
-    <div class="card"><div class="ct">% Poupança</div><div class="chart-wrap chart-sm"><canvas id="cSav"></canvas></div></div>
+
+  <!-- Distribution + platform pie -->
+  <div class="g2 mb">
+    <div class="card"><div class="ct">By Category</div><div class="chart-wrap"><canvas id="cCatPie"></canvas></div></div>
+    <div class="card"><div class="ct">By Platform</div><div class="chart-wrap chart-sm"><canvas id="cPlatPie"></canvas></div></div>
   </div>
+
+  <!-- Monthly + savings -->
+  <div class="g2 mb">
+    <div class="card"><div class="ct">Monthly Contribution</div><div class="chart-wrap chart-sm"><canvas id="cBar"></canvas></div></div>
+    <div class="card"><div class="ct">Savings Rate %</div><div class="chart-wrap chart-sm"><canvas id="cSav"></canvas></div></div>
+  </div>
+
   <!-- Platform table -->
   <div class="tcard">
-    <div class="th2"><div class="ttl">Plataformas — último registo</div></div>
-    <table><thead><tr><th>Plataforma</th><th>Cat.</th><th class="mono">Valor</th><th class="mono">%</th><th class="mono">Invest. Mês</th><th class="mono">Var.</th></tr></thead>
+    <div class="th2"><div class="ttl">Platforms — latest snapshot</div></div>
+    <table><thead><tr><th>Platform</th><th>Cat.</th><th class="mono">Value</th><th class="mono">%</th><th class="mono">This Month</th><th class="mono">Change</th></tr></thead>
     <tbody id="platTable"></tbody></table>
   </div>
 </div>
@@ -446,158 +534,280 @@ input[type=color]{height:32px;padding:2px 4px;border-radius:6px;cursor:pointer}
 <!-- NOVA ENTRADA -->
 <div class="page" id="page-entrada">
   <div class="ph">
-    <div><div class="pt" id="entrada-title">New Entry</div><div class="ps">Log once a month — savings rate is calculated automatically</div></div>
+    <div><div class="pt" id="entrada-title">New Entry</div><div class="ps" id="entrada-sub">Log once a month — savings rate is calculated automatically</div></div>
+    <button class="btn-ghost" id="cancelEditBtn" style="display:none" onclick="cancelEdit()">Cancel</button>
   </div>
-  <div class="fc">
-    <div class="fsect">Mês & Data</div>
-    <div class="g2">
-      <div class="field"><label>Mês</label><input type="text" id="f-month" placeholder="ex: Junho 2026"></div>
-      <div class="field"><label>Data</label><input type="date" id="f-date"></div>
+
+  <!-- Step progress bar -->
+  <div style="display:flex;gap:6px;margin-bottom:20px;align-items:center">
+    <div class="entry-step-dot on" id="estep-0"></div>
+    <div style="flex:1;height:2px;background:var(--bd);border-radius:1px"><div id="estep-bar" style="height:100%;background:var(--ac);border-radius:1px;transition:width .3s;width:0%"></div></div>
+    <div class="entry-step-dot" id="estep-1"></div>
+    <div style="flex:1;height:2px;background:var(--bd);border-radius:1px"><div id="estep-bar2" style="height:100%;background:var(--ac);border-radius:1px;transition:width .3s;width:0%"></div></div>
+    <div class="entry-step-dot" id="estep-2"></div>
+  </div>
+
+  <!-- STEP 1: Month, Date, Income -->
+  <div id="entry-step-1">
+    <div class="fc">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">📅 When & How much?</div>
+      <div style="font-size:12px;color:var(--mu2);margin-bottom:16px">Set the month, date and your income sources for this entry.</div>
+      <div class="g2 mb">
+        <div class="field"><label>Label</label><input type="text" id="f-month" placeholder="e.g. June 2026, Q1 2026..."></div>
+        <div class="field"><label>Date</label><input type="date" id="f-date"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu2);margin-bottom:10px">Income Sources</div>
+      <div id="incomeRows"></div>
+      <button class="btn-ghost" onclick="addIncomeRow()" style="font-size:11px;margin-top:8px">+ Add income source</button>
+      <div class="inc-total" style="margin-top:12px">
+        <span style="font-size:11px;color:var(--mu2)">Total income</span>
+        <span class="mono" style="font-size:16px;font-weight:500;color:var(--gn)" id="incTotal">0 €</span>
+      </div>
+      <div class="field" style="margin-top:12px"><label>Note (optional)</label><input type="text" id="f-note" placeholder="e.g. Bonus, job change..."></div>
     </div>
-    <div class="fsect">Fontes de Rendimento</div>
-    <div id="incomeRows"></div>
-    <button class="btn-ghost" onclick="addIncomeRow()" style="font-size:10px;margin-top:6px">+ Add income source</button>
-    <div class="inc-total"><span style="font-size:11px;color:var(--mu2)">Total rendimento</span><span class="mono" style="font-size:15px;font-weight:500;color:var(--gn)" id="incTotal">0 €</span></div>
-    <div class="g2" style="margin-top:10px">
-      <div class="field"><label>% Poupança</label><div class="savbox"><span class="savbig" id="savDisplay">—</span><span style="font-size:9px;color:var(--mu)">auto</span></div></div>
-      <div class="field"><label>Nota do mês (opcional)</label><input type="text" id="f-note" placeholder="ex: Bónus, mudança de emprego..."></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="entryNextStep(1)">Next — Platforms &amp; Assets →</button>
     </div>
-    <div class="fsect">Plataformas — valor atual + reforço deste mês</div>
-    <div class="pgrid" id="platGrid"></div>
-    <div style="margin-top:16px;display:flex;gap:8px;align-items:center">
-      <button class="btn" onclick="saveEntry()">↓ <span id="saveBtnTxt">Save</span></button>
-      <button class="btn-ghost" id="cancelEditBtn" style="display:none" onclick="cancelEdit()">Cancelar</button>
-      <button class="btn-ghost" onclick="clearForm()">Limpar</button>
-      <span style="font-size:10px;color:var(--mu);margin-left:5px" id="entryHint"></span>
+  </div>
+
+  <!-- STEP 2: Platforms & Assets -->
+  <div id="entry-step-2" style="display:none">
+    <div class="fc">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">▣ Platforms &amp; Assets</div>
+      <div style="font-size:12px;color:var(--mu2);margin-bottom:16px">Enter the current value of each platform and how much you invested this month.</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:11px;color:var(--mu2)">Savings rate: <span class="savbig" id="savDisplay" style="font-size:14px;color:var(--ac)">—</span> <span style="font-size:9px;color:var(--mu)">auto</span></div>
+      </div>
+      <div class="pgrid" id="platGrid"></div>
     </div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px">
+      <button class="btn-ghost" onclick="entryGoStep(1)">← Back</button>
+      <button class="btn" onclick="entryNextStep(2)">Next — Review →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Summary / Review -->
+  <div id="entry-step-3" style="display:none">
+    <div class="fc">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">✅ Review &amp; Save</div>
+      <div style="font-size:12px;color:var(--mu2);margin-bottom:16px">Check everything looks right before saving.</div>
+      <div id="entry-summary"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px;gap:8px">
+      <button class="btn-ghost" onclick="entryGoStep(2)">← Back</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-ghost" onclick="clearForm()">Clear</button>
+        <button class="btn" onclick="saveEntry()"><span id="saveBtnTxt">💾 Save Entry</span></button>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--mu);margin-top:8px;text-align:right" id="entryHint"></div>
   </div>
 </div>
 
 <!-- HISTÓRICO -->
 <div class="page" id="page-historico">
-  <div class="ph"><div><div class="pt">Histórico</div><div class="ps">Carrega para ver detalhe · ✏ para editar</div></div></div>
+  <div class="ph">
+    <div><div class="pt">History</div><div class="ps">Tap to view detail · ✏ to edit</div></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn-ghost" onclick="document.getElementById('csvImportFile').click()">⬆ Import CSV</button>
+      <input type="file" id="csvImportFile" accept=".csv" style="display:none" onchange="onCSVUpload(event)">
+    </div>
+  </div>
   <div id="histList"></div>
 </div>
 
 <!-- PLATAFORMAS -->
 <div class="page" id="page-plataformas">
-  <div class="ph"><div><div class="pt">Plataformas</div><div class="ps">Seleciona uma plataforma para ver a sua evolução</div></div></div>
+  <div class="ph"><div><div class="pt">Platforms</div><div class="ps">Select a platform to see its evolution</div></div></div>
   <div class="plat-layout">
-    <div class="plat-list" id="platList"></div>
-    <div class="plat-detail" id="platDetail">
-      <div class="empty">Seleciona uma plataforma →</div>
+    <div id="platCards" class="plat-cards-list"></div>
+    <div id="platDetail" class="plat-detail">
+      <div class="empty" style="padding:48px 24px;text-align:center;color:var(--mu2)">← Select a platform</div>
     </div>
-  </div>
-</div>
-
-<!-- METAS -->
-<div class="page" id="page-metas">
-  <div class="ph">
-    <div><div class="pt">Metas</div><div class="ps">As metas aparecem também na projeção e no dashboard</div></div>
-    <button class="btn" onclick="openAddGoal()">+ Meta</button>
-  </div>
-  <div id="goalsList"></div>
-  <div style="margin-top:14px;padding:14px 16px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;font-size:11px;color:var(--mu2)">
-    💡 As metas aparecem como linhas no gráfico da página <strong style="color:var(--tx)">Futuro</strong>, e a meta principal aparece no Dashboard como barra de progresso.
   </div>
 </div>
 
 <!-- FUTURO -->
 <div class="page" id="page-futuro">
-  <div class="ph"><div><div class="pt">Futuro</div><div class="ps">Quanto vou ter — e quando posso reformar-me</div></div></div>
+  <div class="ph">
+    <div><div class="pt">Future</div><div class="ps">Projection, FIRE &amp; goals</div></div>
+    <div id="future-goal-btn" style="display:none">
+      <button class="btn btn-sm" onclick="openAddGoal()">＋ Goal</button>
+    </div>
+  </div>
 
-  <div class="future-layout">
-    <!-- Controls -->
-    <div class="future-controls">
-      <div class="card card-sm">
-        <div class="fsect" style="margin-top:0">Parâmetros</div>
-        <div class="field" style="margin-bottom:8px"><label>Contribuição/Mês (€)</label><input type="number" id="p-monthly" value="500" oninput="renderFuturo()"></div>
-        <div class="field" style="margin-bottom:8px"><label>Retorno Anual Estimado (%)</label><input type="number" id="p-rate" value="7" step="0.5" oninput="renderFuturo()"></div>
-        <div class="field" style="margin-bottom:8px"><label>Inflação (%)</label><input type="number" id="p-inf" value="2.5" step="0.5" oninput="renderFuturo()"></div>
-        <div class="field" style="margin-bottom:8px"><label>Imposto sobre Ganhos (%)</label><input type="number" id="p-tax" value="28" oninput="renderFuturo()"></div>
-        <div class="fsect">FIRE</div>
-        <div class="field" style="margin-bottom:8px"><label>Despesa Mensal na Reforma (€)</label><input type="number" id="p-fire-exp" value="2000" oninput="renderFuturo()"></div>
-        <div class="field"><label>Taxa de Retirada (%)</label><input type="number" id="p-fire-rate" value="4" step="0.5" oninput="renderFuturo()"></div>
+  <!-- Tabs -->
+  <div class="g2 mb" style="gap:10px" id="future-tabs">
+    <div id="ftab-proj" onclick="switchFutureTab('proj')" style="cursor:pointer;background:var(--sf);border:2px solid var(--ac);border-radius:12px;padding:14px 16px;transition:all .2s">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="font-size:18px">◆</span>
+        <span style="font-size:13px;font-weight:700">Projection</span>
       </div>
-      <!-- Scenario chips -->
-      <div class="card card-sm">
-        <div class="ct" style="margin-bottom:8px">Cenário</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap">
-          <button class="chip on" id="scen-pess" onclick="setScen('pess',this)">Pessimista</button>
-          <button class="chip on" id="scen-base" onclick="setScen('base',this)">Base</button>
-          <button class="chip on" id="scen-opt" onclick="setScen('opt',this)">Optimista</button>
+      <div style="font-size:11px;color:var(--mu2)">FIRE calculator, scenarios &amp; chart</div>
+    </div>
+    <div id="ftab-goals" onclick="switchFutureTab('goals')" style="cursor:pointer;background:var(--sf);border:2px solid var(--bd);border-radius:12px;padding:14px 16px;transition:all .2s">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="font-size:18px">◎</span>
+        <span style="font-size:13px;font-weight:700">Goals</span>
+        <span style="font-family:var(--mo);font-size:10px;background:var(--sf2s);padding:1px 7px;border-radius:10px;color:var(--mu2)" id="ftab-goals-count"></span>
+      </div>
+      <div style="font-size:11px;color:var(--mu2)">Financial targets &amp; milestones</div>
+    </div>
+  </div>
+
+  <!-- Tab: Projection -->
+  <div id="ftab-content-proj">
+    <div class="future-layout">
+      <!-- Controls -->
+      <div class="future-controls">
+        <div class="card card-sm">
+          <div class="fsect" style="margin-top:0">Parameters</div>
+          <div class="field" style="margin-bottom:8px"><label>Monthly Contribution (€)</label><input type="number" id="p-monthly" value="500" oninput="renderFuturo()"></div>
+          <div class="field" style="margin-bottom:8px"><label>Estimated Annual Return (%)</label><input type="number" id="p-rate" value="7" step="0.5" oninput="renderFuturo()"></div>
+          <div class="field" style="margin-bottom:8px"><label>Inflation (%)</label><input type="number" id="p-inf" value="2.5" step="0.5" oninput="renderFuturo()"></div>
+          <div class="field" style="margin-bottom:8px"><label>Capital Gains Tax (%)</label><input type="number" id="p-tax" value="28" oninput="renderFuturo()"></div>
+          <div class="fsect">FIRE</div>
+          <div class="field" style="margin-bottom:8px"><label>Monthly Expenses in Retirement (€)</label><input type="number" id="p-fire-exp" value="2000" oninput="renderFuturo()"></div>
+          <div class="field"><label>Withdrawal Rate (%)</label><input type="number" id="p-fire-rate" value="4" step="0.5" oninput="renderFuturo()"></div>
+        </div>
+        <!-- Scenario chips -->
+        <div class="card card-sm">
+          <div class="ct" style="margin-bottom:8px">Scenario</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <button class="chip on" id="scen-pess" onclick="setScen('pess',this)">Pessimistic</button>
+            <button class="chip on" id="scen-base" onclick="setScen('base',this)">Base</button>
+            <button class="chip on" id="scen-opt" onclick="setScen('opt',this)">Optimistic</button>
+          </div>
+        </div>
+        <!-- Filter -->
+        <div class="card card-sm">
+          <div class="ct" style="margin-bottom:8px">Show table</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap" id="projFilters"></div>
         </div>
       </div>
-      <!-- Filter -->
-      <div class="card card-sm">
-        <div class="ct" style="margin-bottom:8px">Mostrar tabela</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap" id="projFilters"></div>
+
+      <!-- Right panel -->
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="g2">
+          <div class="future-answer">
+            <div class="fa-label">In <span id="fa-years">30</span> years you'll have</div>
+            <div class="fa-val" id="fa-val">—</div>
+            <div class="fa-sub" id="fa-sub">—</div>
+          </div>
+          <div class="future-answer">
+            <div class="fa-label">FIRE — you can retire</div>
+            <div id="fire-answer">
+              <div class="fa-val" id="fa-fire-yr" style="margin-bottom:4px">—</div>
+              <div class="fire-badge" id="fa-fire-badge" style="display:none">🔥 <span id="fa-fire-txt">—</span></div>
+              <div class="fa-sub" id="fa-fire-sub">—</div>
+            </div>
+            <div class="pb-wrap" style="margin-top:8px">
+              <div class="pb-labels"><span>Progress to FIRE</span><span id="fa-fire-pct">—</span></div>
+              <div class="pb"><div class="pb-fill" id="fa-fire-fill" style="width:0%;background:var(--gn)"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="g3" id="scenCards"></div>
+        <div class="card">
+          <div class="ct">Projected evolution · goals &amp; FIRE marked</div>
+          <div class="chart-wrap chart-lg"><canvas id="cFuturo"></canvas></div>
+        </div>
+        <div class="tcard" id="projTableWrap">
+          <div class="ptrow hdr"><div>Year</div><div>Age</div><div>Value</div><div>Real Value</div><div>Accum. Gain</div><div>Net Gain</div></div>
+          <div id="projRows"></div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Right panel -->
-    <div style="display:flex;flex-direction:column;gap:13px">
-      <!-- Answer boxes -->
-      <div class="g2">
-        <div class="future-answer">
-          <div class="fa-label">Em <span id="fa-years">30</span> anos tens</div>
-          <div class="fa-val" id="fa-val">—</div>
-          <div class="fa-sub" id="fa-sub">—</div>
-        </div>
-        <div class="future-answer">
-          <div class="fa-label">FIRE — podes reformar-te</div>
-          <div id="fire-answer">
-            <div class="fa-val" id="fa-fire-yr" style="margin-bottom:4px">—</div>
-            <div class="fire-badge" id="fa-fire-badge" style="display:none">🔥 <span id="fa-fire-txt">—</span></div>
-            <div class="fa-sub" id="fa-fire-sub">—</div>
-          </div>
-          <div class="pb-wrap" style="margin-top:8px">
-            <div class="pb-labels"><span>Progresso para o FIRE</span><span id="fa-fire-pct">—</span></div>
-            <div class="pb"><div class="pb-fill" id="fa-fire-fill" style="width:0%;background:var(--gn)"></div></div>
-          </div>
-        </div>
-      </div>
-      <!-- 3 scenarios row -->
-      <div class="g3" id="scenCards"></div>
-      <!-- Chart -->
-      <div class="card">
-        <div class="ct">Evolução projetada · metas e FIRE assinalados</div>
-        <div class="chart-wrap chart-lg"><canvas id="cFuturo"></canvas></div>
-      </div>
-      <!-- Table -->
-      <div class="tcard" id="projTableWrap">
-        <div class="ptrow hdr"><div>Ano</div><div>Idade</div><div>Valor</div><div>Valor Real</div><div>Ganho Acum.</div><div>Ganho Líq.</div></div>
-        <div id="projRows"></div>
-      </div>
+  <!-- Tab: Goals -->
+  <div id="ftab-content-goals" style="display:none">
+    <div id="goalsList"></div>
+    <div style="font-size:11px;color:var(--mu2);margin-top:12px;padding:12px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:10px">
+      💡 Goals appear as lines on the projection chart. Set a primary goal in <strong style="color:var(--tx)">Options</strong> to show a progress bar on the dashboard.
     </div>
   </div>
 </div>
 
 <!-- OPÇÕES -->
 <div class="page" id="page-opcoes">
-  <div class="ph"><div><div class="pt">Opções</div><div class="ps">Preferências, categorias e plataformas</div></div></div>
+  <div class="ph"><div><div class="pt">Options</div><div class="ps">Preferences, categories and platforms</div></div></div>
 
-  <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:8px">Aplicação</div>
+  <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:8px" data-i18n="opt_app">Application</div>
   <div class="tcard mb">
-    <div class="srow"><div><div class="slbl">Tema</div></div><div class="seg" id="themeSeg"><button class="segb on" onclick="setTheme('dark',this)">◑ Escuro</button><button class="segb" onclick="setTheme('light',this)">☀ Claro</button></div></div>
-    <div class="srow"><div><div class="slbl">Idade Atual</div><div class="ssub">Para projeção e FIRE</div></div><input type="number" id="opt-age" value="37" style="width:65px;text-align:center" oninput="saveOpts()"></div>
-    <div class="srow"><div><div class="slbl">Nome</div></div><input type="text" id="opt-name" placeholder="O teu nome" style="width:150px" oninput="saveOpts()"></div>
-    <div class="srow"><div><div class="slbl">Meta principal</div><div class="ssub">Aparece no dashboard como barra de progresso</div></div><select id="opt-primary-goal" style="width:180px" onchange="saveOpts();renderDash()"><option value="">— Nenhuma —</option></select></div>
+    <div class="srow"><div><div class="slbl" data-i18n="opt_theme">Theme</div></div><div class="seg" id="themeSeg"><button class="segb on" onclick="setTheme('dark',this)">◑ Escuro</button><button class="segb" onclick="setTheme('light',this)">☀ Claro</button></div></div>
+    <div class="srow"><div><div class="slbl" data-i18n="opt_age">Current Age</div><div class="ssub" data-i18n="opt_age_sub">For projection and FIRE</div></div><input type="number" id="opt-age" value="37" style="width:65px;text-align:center" oninput="saveOpts()"></div>
+    <div class="srow"><div><div class="slbl" data-i18n="opt_name">Name</div></div><input type="text" id="opt-name" placeholder="O teu nome" style="width:150px" oninput="saveOpts()"></div>
+    <div class="srow"><div><div class="slbl" data-i18n="opt_primary">Primary Goal</div><div class="ssub">Aparece no dashboard</div></div><select id="opt-primary-goal" style="width:180px" onchange="saveOpts();renderDash()"><option value="">— Nenhuma —</option></select></div>
+    <div class="srow"><div><div class="slbl" data-i18n="opt_lang">Language</div></div>
+      <div class="seg" id="langSeg">
+        <button class="segb" onclick="setLang('en',this)">🇬🇧 EN</button>
+        <button class="segb" onclick="setLang('pt',this)">🇵🇹 PT</button>
+      </div>
+    </div>
   </div>
 
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-    <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)">Categorias</div>
-    <button class="btn btn-sm" onclick="openAddCat()">+ Category</button>
+    <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)" data-i18n="opt_cats">Categories</div>
+    <button class="btn btn-sm" id="addCatBtn" onclick="openAddCat()">+ Category</button>
   </div>
   <div class="tcard mb" id="catManager"></div>
 
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-    <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)">Plataformas</div>
-    <button class="btn btn-sm" onclick="openAddAsset()">+ Platform</button>
+    <div style="display:flex;align-items:center;gap:7px">
+      <span>▣</span>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)" data-i18n="opt_plats">Platforms</div>
+    </div>
+    <button class="btn btn-sm" id="addPlatBtn" onclick="openAddPlatform()">+ Platform</button>
   </div>
-  <div class="tcard mb" id="assetManager"></div>
+  <div style="font-size:11px;color:var(--mu2);margin-bottom:8px">Where your money is held — brokers, banks, wallets.</div>
+  <div class="tcard mb" id="platManager"></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;margin-top:20px">
+    <div style="display:flex;align-items:center;gap:7px">
+      <span>◆</span>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)">Assets</div>
+    </div>
+    <button class="btn btn-sm" id="addAssetBtn" onclick="openAddAssetItem()">+ Asset</button>
+  </div>
+  <div style="font-size:11px;color:var(--mu2);margin-bottom:8px">Individual positions you want to track — ETFs, stocks, crypto.</div>
+  <div class="tcard mb" id="assetItemManager"></div>
 </div>
 
+
+<!-- ASSETS -->
+<div class="page" id="page-assets">
+  <div class="ph">
+    <div><div class="pt">Assets</div><div class="ps">Individual positions — click a row to expand</div></div>
+    <button class="btn btn-sm" onclick="refreshAllPrices()">↻ Refresh Prices</button>
+  </div>
+
+  <!-- Overview chart -->
+  <div class="card mb" id="assets-overview-wrap" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="ct">Portfolio Value by Asset</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap" id="assets-chart-legend"></div>
+    </div>
+    <div class="chart-wrap" style="height:200px"><canvas id="cAssetsOverview"></canvas></div>
+  </div>
+
+  <!-- Ticker hint -->
+  <div style="background:rgba(99,112,255,.08);border:1px solid rgba(99,112,255,.2);border-radius:10px;padding:10px 14px;font-size:11px;color:var(--mu2);margin-bottom:12px">
+    💡 <strong style="color:var(--tx)">Ticker format:</strong> ETFs use Yahoo Finance symbols e.g. <span style="font-family:var(--mo)">VWCE.DE</span>, <span style="font-family:var(--mo)">IWDA.L</span>. Crypto uses CoinGecko IDs e.g. <span style="font-family:var(--mo)">bitcoin</span>, <span style="font-family:var(--mo)">ethereum</span>.
+  </div>
+
+  <div class="tcard" id="holdingsTableWrap">
+    <table id="holdingsTable">
+      <thead><tr>
+        <th>Asset</th><th>Where</th><th>Type</th>
+        <th>Qty</th><th>Avg. Buy</th><th>Current Price</th>
+        <th>Cost</th><th>Value</th><th>P&L</th>
+      </tr></thead>
+      <tbody id="holdingsTbody"></tbody>
+    </table>
+    <div class="empty" id="holdingsEmpty">No holdings configured yet.<br>Go to <strong>Options → Platforms</strong> and mark a platform as an individual asset.</div>
+  </div>
+</div>
 </main>
 
 <!-- MODAL -->
@@ -615,30 +825,20 @@ let CFG={
   categories:[
     {id:'Stocks',label:'Stocks',color:'#5b8fff'},
     {id:'Crypto',label:'Crypto',color:'#ffb547'},
-    {id:'Savings',label:'Savings',color:'#a78bff'},
-    {id:'Pension',label:'Pension',color:'#ff6b9d'},
+    {id:'Savings',label:'Savings',color:'#00bcd4'},
   ],
   platforms:[
-    {id:'etoro',name:'eToro',cat:'Stocks',color:'#5b8fff',active:true},
-    {id:'degiro',name:'DEGIRO',cat:'Stocks',color:'#00d97e',active:true},
-    {id:'freetrade',name:'Freetrade',cat:'Stocks',color:'#7eb8ff',active:true},
-    {id:'btc',name:'Bitcoin Wallet',cat:'Crypto',color:'#ffb547',active:true},
-    {id:'kraken',name:'Kraken',cat:'Crypto',color:'#ff8c42',active:true},
-    {id:'crypto_other',name:'Other Crypto',cat:'Crypto',color:'#e040fb',active:true},
-    {id:'savings_acc',name:'High-Yield Savings',cat:'Savings',color:'#00bcd4',active:true},
-    {id:'emergency',name:'Emergency Fund',cat:'Savings',color:'#26c6da',active:true},
-    {id:'bonds',name:'Gov. Bonds',cat:'Savings',color:'#a78bff',active:true},
-    {id:'pension_a',name:'Pension Fund A',cat:'Pension',color:'#ff6b9d',active:true},
-    {id:'pension_b',name:'Pension Fund B',cat:'Pension',color:'#ff4d84',active:true},
-    {id:'pension_vol',name:'Voluntary Pension',cat:'Pension',color:'#c44dff',active:true},
+    {id:'broker',name:'Broker Account',cat:'Stocks',color:'#5b8fff',active:true},
+    {id:'savings',name:'Savings Account',cat:'Savings',color:'#00bcd4',active:true},
+    {id:'vwce',name:'VWCE',cat:'Stocks',color:'#00d97e',active:true,isAsset:true,ticker:'VWCE.DE',assetType:'etf',where:'Broker',currentPrice:null,lastFetch:null},
+    {id:'btc',name:'Bitcoin',cat:'Crypto',color:'#ffb547',active:true,isAsset:true,ticker:'bitcoin',assetType:'crypto',where:'Exchange',currentPrice:null,lastFetch:null},
   ],
   goals:[
-    {name:'House down payment',target:30000,age:35},
-    {name:'Financial Independence',target:250000,age:50},
+    {name:'Financial Independence',target:500000,age:50},
   ],
   fire:{expense:2500,rate:4}
-};
-let OPTS={theme:'dark',age:32,name:'Alex',primaryGoal:'Financial Independence'};
+}
+let OPTS={theme:'dark',age:32,name:'Alex',primaryGoal:'Financial Independence',lang:'en'};
 let incomeData=[];
 let editingMonth=null;
 let activePlatId=null;
@@ -656,6 +856,179 @@ function catBg(id){const c=catColor(id);const r=parseInt(c.slice(1,3),16),g=pars
 // STORAGE
 // ═══════════════════════════════════════════
 const SK='pf_v4_db',CK='pf_v4_cfg',OK='pf_v4_opts';
+
+// ═══════════════════════════════════════════
+// i18n
+// ═══════════════════════════════════════════
+const I18N={
+  en:{
+    // Nav
+    nav_dashboard:'Dashboard',nav_entry:'New Entry',nav_history:'History',
+    nav_platforms:'Platforms',nav_holdings:'Assets',nav_goals:'Goals',
+    nav_future:'Future',nav_options:'Options',
+    // Dashboard
+    dash_total:'Total Portfolio',dash_invested:'Total Invested',dash_return:'Return',
+    dash_savings:'Avg. Savings Rate',dash_evo:'Portfolio Evolution',
+    dash_dist:'Distribution',dash_monthly:'Monthly Contribution',
+    dash_byplat:'By Platform',dash_savrate:'Savings Rate',dash_platforms:'Platforms',
+    // Entry
+    entry_title:'New Entry',entry_hint:'Log once a month — savings rate is calculated automatically',
+    entry_month:'Month',entry_date:'Date',entry_income:'Income Sources',
+    entry_total_income:'Total income',entry_savings:'Savings %',
+    entry_note:'Month note (optional)',entry_note_ph:'e.g. Bonus, job change...',
+    entry_platforms:'Platforms — current value + this month contribution',
+    entry_save:'Save',entry_cancel:'Cancel',entry_clear:'Clear',
+    entry_inv_month:'This Month',entry_total:'Current Total',
+    // History
+    hist_title:'History',hist_empty:'No entries yet.',
+    // Platforms
+    plat_title:'Platforms',plat_empty:'No data yet.',
+    // Holdings
+    hold_title:'Assets',hold_sub:'Individual assets — ETFs, stocks, crypto',
+    hold_refresh:'↻ Refresh Prices',hold_fetching:'↻ Fetching...',
+    hold_asset:'Asset',hold_where:'Where',hold_type:'Type',hold_qty:'Qty',
+    hold_buy:'Avg. Buy',hold_cur:'Current Price',hold_cost:'Cost',
+    hold_value:'Value',hold_pl:'P&L',
+    hold_tip:'<strong>Ticker format:</strong> ETFs/Stocks use Yahoo Finance symbols — e.g. <span style="font-family:var(--mo)">VWCE.DE</span>, <span style="font-family:var(--mo)">IWDA.L</span>. Crypto uses CoinGecko IDs — e.g. <span style="font-family:var(--mo)">bitcoin</span>, <span style="font-family:var(--mo)">ethereum</span>.',
+    hold_empty:'No assets configured yet.<br>Go to <strong>Options → Assets</strong> to add your first asset.',
+    // Goals
+    goals_title:'Goals',goals_add:'+ Goal',
+    // Future
+    future_title:'Future',
+    // Options
+    opt_title:'Options',opt_sub:'Preferences, categories and platforms',
+    opt_app:'Application',opt_theme:'Theme',opt_dark:'◑ Dark',opt_light:'☀ Light',
+    opt_age:'Current Age',opt_age_sub:'For projection and FIRE',
+    opt_name:'Name',opt_name_ph:'Your name',
+    opt_primary:'Primary Goal',opt_primary_none:'— None —',
+    opt_lang:'Language',
+    opt_cats:'Categories',opt_add_cat:'+ Category',
+    opt_plats:'Platforms',opt_add_plat:'+ Platform',
+    // Snapshot modal
+    snap_title:'📸 Price Snapshot',
+    snap_sub:'This will create a new history entry for',
+    snap_sub2:'with current market prices for your holdings. Non-holding platforms keep their last recorded value.',
+    snap_warn:'Some prices could not be fetched. Those assets will keep their last recorded value.',
+    snap_new_total:'New Portfolio Total',snap_vs:'vs last entry',
+    snap_cancel:'Cancel',snap_save:'✓ Save as New Entry',
+    snap_buy:'Buy Price',snap_last:'Last Price',snap_new:'New Price',snap_newval:'New Value',snap_change:'Change',
+    // Misc
+    no_price:'Unavailable',saved:'saved ✓',updated:'updated ✓',
+    confirm_remove:'Remove this asset?',
+  },
+  pt:{
+    nav_dashboard:'Dashboard',nav_entry:'Nova Entrada',nav_history:'Histórico',
+    nav_platforms:'Plataformas',nav_holdings:'Assets',nav_goals:'Metas',
+    nav_future:'Futuro',nav_options:'Opções',
+    dash_total:'Total Portfolio',dash_invested:'Total Investido',dash_return:'Retorno',
+    dash_savings:'Taxa Poupança Média',dash_evo:'Evolução do Portfolio',
+    dash_dist:'Distribuição',dash_monthly:'Contribuição Mensal',
+    dash_byplat:'By Platform',dash_savrate:'Taxa de Poupança',dash_platforms:'Plataformas',
+    entry_title:'Nova Entrada',entry_hint:'Regista uma vez por mês — a taxa de poupança é calculada automaticamente',
+    entry_month:'Mês',entry_date:'Data',entry_income:'Fontes de Income',
+    entry_total_income:'Total rendimento',entry_savings:'Savings Rate',
+    entry_note:'Nota do mês (opcional)',entry_note_ph:'ex: Bónus, mudança de emprego...',
+    entry_platforms:'Plataformas — valor atual + reforço deste mês',
+    entry_save:'Guardar',entry_cancel:'Cancelar',entry_clear:'Limpar',
+    entry_inv_month:'Este Mês',entry_total:'Total Atual',
+    hist_title:'Histórico',hist_empty:'Sem entradas ainda.',
+    plat_title:'Plataformas',plat_empty:'Sem dados ainda.',
+    hold_title:'Assets',hold_sub:'Ativos individuais — ETFs, ações, cripto',
+    hold_refresh:'↻ Atualizar Preços',hold_fetching:'↻ A buscar...',
+    hold_asset:'Ativo',hold_where:'Onde',hold_type:'Tipo',hold_qty:'Qtd',
+    hold_buy:'Preço Compra',hold_cur:'Preço Atual',hold_cost:'Custo',
+    hold_value:'Value',hold_pl:'P&L',
+    hold_tip:'<strong>Formato do ticker:</strong> ETFs/Ações usam símbolos do Yahoo Finance — ex. <span style="font-family:var(--mo)">VWCE.DE</span>, <span style="font-family:var(--mo)">IWDA.L</span>. Cripto usa IDs do CoinGecko — ex. <span style="font-family:var(--mo)">bitcoin</span>, <span style="font-family:var(--mo)">ethereum</span>.',
+    hold_empty:'Nenhum ativo configurado ainda.<br>Vai a <strong>Opções → Ativos</strong> para adicionar o teu primeiro ativo.',
+    goals_title:'Metas',goals_add:'+ Meta',
+    future_title:'Futuro',
+    opt_title:'Opções',opt_sub:'Preferências, categorias e plataformas',
+    opt_app:'Aplicação',opt_theme:'Tema',opt_dark:'◑ Escuro',opt_light:'☀ Claro',
+    opt_age:'Idade Atual',opt_age_sub:'Para projeção e FIRE',
+    opt_name:'Nome',opt_name_ph:'O teu nome',
+    opt_primary:'Meta Principal',opt_primary_none:'— Nenhuma —',
+    opt_lang:'Idioma',
+    opt_cats:'Categorias',opt_add_cat:'+ Categoria',
+    opt_plats:'Plataformas',opt_add_plat:'+ Plataforma',
+    snap_title:'📸 Snapshot de Preços',
+    snap_sub:'Vai criar uma nova entrada no histórico para',
+    snap_sub2:'com os preços atuais de mercado. As plataformas sem holdings mantêm o último valor registado.',
+    snap_warn:'Alguns preços não foram obtidos. Esses ativos mantêm o último valor registado.',
+    snap_new_total:'Novo Total do Portfolio',snap_vs:'vs última entrada',
+    snap_cancel:'Cancelar',snap_save:'✓ Guardar como Nova Entrada',
+    snap_buy:'Preço Compra',snap_last:'Último Preço',snap_new:'Novo Preço',snap_newval:'Novo Valor',snap_change:'Change',
+    no_price:'Indisponível',saved:'guardado ✓',updated:'atualizado ✓',
+    confirm_remove:'Remover este ativo?',
+  }
+};
+function t(key){return (I18N[OPTS.lang||'en']||I18N.en)[key]||I18N.en[key]||key;}
+
+function applyLang(){
+  // Nav sidebar
+  const niEls=document.querySelectorAll('.ni');
+  const niKeys=['nav_dashboard','nav_entry','nav_history','nav_platforms','nav_holdings','nav_future','nav_options'];
+  niEls.forEach((el,i)=>{if(i<niKeys.length&&niKeys[i]){const icon=el.querySelector('span');const txt=t(niKeys[i]);el.innerHTML='';if(icon)el.appendChild(icon);el.appendChild(document.createTextNode(' '+txt));}});
+  // Bottom nav
+  const bniMap={bni_dashboard:'nav_dashboard',bni_entrada:'nav_entry',bni_historico:'nav_history',bni_plataformas:'nav_platforms',bni_assets:'nav_holdings',bni_futuro:'nav_future'};
+  Object.entries(bniMap).forEach(([id,key])=>{
+    const el=document.getElementById(id.replace('_','-'));
+    if(el){const lbl=el.querySelector('.bni-label');if(lbl)lbl.textContent=t(key);}
+  });
+  // Page titles
+  const titles={
+    'dash-title':t('nav_dashboard'),
+    'entrada-title':t('entry_title'),
+  };
+  Object.entries(titles).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
+  // Options page static text
+  const optSub=document.querySelector('#page-opcoes .ps');if(optSub)optSub.textContent=t('opt_sub');
+  // Entry page hint
+  const eh2=document.querySelector('#page-entrada .ps');if(eh2)eh2.textContent=t('entry_hint');
+  // Holdings page
+  const hTitle=document.querySelector('#page-assets .pt');if(hTitle)hTitle.textContent=t('hold_title');
+  const hSub=document.querySelector('#page-assets .ps');if(hSub)hSub.textContent=t('hold_sub');
+  const hRefresh=document.querySelector('[onclick="refreshAllPrices()"]');if(hRefresh)hRefresh.textContent=t('hold_refresh');
+  // Holdings table headers
+  const holdThead=document.querySelector('#holdingsTable thead tr');
+  if(holdThead)holdThead.innerHTML=`<th>${t('hold_asset')}</th><th>${t('hold_where')}</th><th>${t('hold_type')}</th><th>${t('hold_qty')}</th><th>${t('hold_buy')}</th><th>${t('hold_cur')}</th><th>${t('hold_cost')}</th><th>${t('hold_value')}</th><th>${t('hold_pl')}</th>`;
+  // Holdings tip
+  const tip=document.querySelector('#page-assets .alert, #page-assets [style*="rgba(99,112,255"]');
+  if(tip)tip.innerHTML='💡 '+t('hold_tip');
+  // Options labels with data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.textContent=t(el.dataset.i18n);
+  });
+  // Theme buttons
+  const tsegs=document.querySelectorAll('#themeSeg .segb');
+  if(tsegs[0])tsegs[0].textContent=t('opt_dark');
+  if(tsegs[1])tsegs[1].textContent=t('opt_light');
+  // Primary goal none option
+  const pgNone=document.querySelector('#opt-primary-goal option[value=""]');
+  if(pgNone)pgNone.textContent=t('opt_primary_none');
+  // Name placeholder
+  const nameEl=document.getElementById('opt-name');if(nameEl)nameEl.placeholder=t('opt_name_ph');
+  // Note placeholder
+  const noteEl=document.getElementById('f-note');if(noteEl)noteEl.placeholder=t('entry_note_ph');
+  // Buttons
+  const acb=document.getElementById('addCatBtn');if(acb)acb.textContent=t('opt_add_cat');
+  const apb=document.getElementById('addPlatBtn');if(apb)apb.textContent=t('opt_add_plat');
+  const aab=document.getElementById('addAssetBtn');if(aab)aab.textContent='+ Asset';
+  // Entry section labels
+  const fsects=document.querySelectorAll('#page-entrada .fsect');
+  if(fsects[0])fsects[0].textContent=t('entry_month')+' & '+t('entry_date');
+  if(fsects[1])fsects[1].textContent=t('entry_income');
+  if(fsects[2])fsects[2].textContent=t('entry_platforms');
+  // Entry buttons
+  const savBtn=document.getElementById('saveBtnTxt');if(savBtn&&savBtn.textContent!=='Save changes'&&savBtn.textContent!=='Guardar alterações')savBtn.textContent=t('entry_save');
+  const clrBtn=document.querySelector('[onclick="clearForm()"]');if(clrBtn)clrBtn.textContent=t('entry_clear');
+  const incTotalLbl=document.querySelector('.inc-total span:first-child');if(incTotalLbl)incTotalLbl.textContent=t('entry_total_income');
+  // Platform/Holdings page titles
+  const platTitle=document.querySelector('#page-plataformas .pt');if(platTitle)platTitle.textContent=t('plat_title');
+  const futureTitle=document.querySelector('#page-futuro .pt');if(futureTitle)futureTitle.textContent=t('future_title');
+  // History title
+  const histTitle=document.querySelector('#page-historico .pt');if(histTitle)histTitle.textContent=t('hist_title');
+}
+
 function loadAll(){
   // DEMO MODE: always load demo data, ignore localStorage
   DB=getDefaultDB();
@@ -663,10 +1036,18 @@ function loadAll(){
   if(!CFG.goals)CFG.goals=[];
   if(!CFG.fire)CFG.fire={expense:2500,rate:4};
   DB.entries.forEach(e=>{if(!e.income)e.income=[{label:'Salary',amount:e.salary||0}];});
-  applyTheme();
+  applyTheme();applyLang();
 }
 function saveDB(){try{localStorage.setItem(SK,JSON.stringify(DB));}catch(e){}updateStatus();}
 function saveCFG(){try{localStorage.setItem(CK,JSON.stringify(CFG));}catch(e){}}
+function setLang(lang,el){
+  OPTS.lang=lang;
+  saveOpts();
+  applyLang();
+  // Update seg buttons
+  document.querySelectorAll('#langSeg .segb').forEach(b=>b.classList.remove('on'));
+  if(el)el.classList.add('on');
+}
 function saveOpts(){
   OPTS.age=parseInt(document.getElementById('opt-age')?.value)||37;
   OPTS.name=document.getElementById('opt-name')?.value||'';
@@ -685,7 +1066,7 @@ function applyTheme(){
   const on2=document.getElementById('opt-name');if(on2)on2.value=OPTS.name||'';
 }
 function setTheme(th,btn){OPTS.theme=th;document.documentElement.setAttribute('data-theme',th);document.querySelectorAll('#themeSeg .segb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');saveOpts();destroyCharts();initCharts();renderAll();}
-function resetCats(){CFG.categories=[{id:'Investimento',label:'Investimento',color:'#5b8fff'},{id:'Crypto',label:'Crypto',color:'#ffb547'},{id:'Poupança',label:'Poupança',color:'#a78bff'},{id:'PPR',label:'PPR',color:'#ff6b9d'}];}
+function resetCats(){CFG.categories=[{id:'Stocks',label:'Stocks',color:'#5b8fff'},{id:'Crypto',label:'Crypto',color:'#ffb547'},{id:'Poupança',label:'Poupança',color:'#a78bff'},{id:'PPR',label:'PPR',color:'#ff6b9d'}];}
 
 function exportData(){
   const blob=new Blob([JSON.stringify({db:DB,cfg:CFG},null,2)],{type:'application/json'});
@@ -711,7 +1092,7 @@ function importData(e){
 // NAV
 // ═══════════════════════════════════════════
 // Page map for sidebar .ni elements
-const PAGE_NAV_IDX={dashboard:0,entrada:1,historico:2,plataformas:4,metas:5,futuro:6,opcoes:7};
+const PAGE_NAV_IDX={dashboard:0,entrada:1,historico:2,plataformas:4,assets:5,futuro:6,opcoes:7};
 
 function navTo(page){
   const nis=document.querySelectorAll('.ni');
@@ -732,11 +1113,11 @@ function nav(page,el){
   document.querySelectorAll('.bni').forEach(b=>b.classList.remove('on'));
   const bni=document.getElementById('bni-'+page);
   if(bni)bni.classList.add('on');
-  if(page==='futuro'){if(!cFuturo){cFuturo=mkC('cFuturo','line',{labels:[],datasets:[]},lineOpts(null,true));}renderFuturo();}
+  if(page==='futuro'){if(!cFuturo){cFuturo=mkC('cFuturo','line',{labels:[],datasets:[]},lineOpts(null,true));}renderFuturo();const cnt=document.getElementById('ftab-goals-count');if(cnt)cnt.textContent=CFG.goals.length?`${CFG.goals.length} goal${CFG.goals.length!==1?'s':''}`:'';}
   if(page==='opcoes'){applyTheme();buildManagers();populateGoalSelect();}
-  if(page==='plataformas')buildPlatList();
-  if(page==='metas')renderGoals();
+  if(page==='plataformas'){buildPlatCards();}
   if(page==='historico')renderHistory();
+  if(page==='assets')renderAssets();
 }
 
 // ═══════════════════════════════════════════
@@ -749,14 +1130,14 @@ function getIncome(e){return e.income?e.income.reduce((s,i)=>s+(i.amount||0),0):
 // ═══════════════════════════════════════════
 // CHARTS
 // ═══════════════════════════════════════════
-let cEvo,cCatPie,cBar,cPlatPie,cSav,cPlatDet,cFuturo;
+let cEvo,cCatPie,cBar,cPlatPie,cSav,cPlatDet,cFuturo,cAssetsOverview,cPlatComparison,cPlatContrib;
 function dk(){return document.documentElement.getAttribute('data-theme')!=='light';}
 function cd(){const d=dk();return{g:d?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)',t:d?'#4a5270':'#9aa5c4',tbg:d?'#161922':'#fff',tbrd:d?'#2a3045':'#e2e6f0',tt:d?'#8892b0':'#5a6a8a',tb:d?'#eef0f6':'#0f172a',bc:d?'#08090c':'#fff'};}
 function lineOpts(ycb,legend=false){const d=cd();return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:legend,labels:{color:d.t,font:{family:"'DM Mono'",size:10},boxWidth:8,padding:7}},tooltip:{backgroundColor:d.tbg,titleColor:d.tt,bodyColor:d.tb,borderColor:d.tbrd,borderWidth:1,padding:8}},scales:{x:{grid:{color:d.g},ticks:{color:d.t,font:{family:"'DM Mono'"},maxTicksLimit:10}},y:{grid:{color:d.g},ticks:{color:d.t,font:{family:"'DM Mono'"},callback:ycb||(v=>fEUR(v))}}}};}
 function pieOpts(){const d=cd();return{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{color:d.t,font:{family:"'DM Mono'",size:10},boxWidth:7,padding:6}},tooltip:{backgroundColor:d.tbg,titleColor:d.tt,bodyColor:d.tb,borderColor:d.tbrd,borderWidth:1,callbacks:{label:c=>{const s=c.dataset.data.reduce((a,b)=>a+b,0);return` ${fEUR(c.parsed)} (${(c.parsed/s*100).toFixed(1)}%)`;}}}}};}
 function mkC(id,type,data,opts){const el=document.getElementById(id);if(!el)return null;return new Chart(el.getContext('2d'),{type,data,options:opts});}
 function upd(chart,labels,datasets){if(!chart)return;chart.data.labels=labels;chart.data.datasets=datasets;chart.update();}
-function destroyCharts(){[cEvo,cCatPie,cBar,cPlatPie,cSav].forEach(c=>c&&c.destroy());if(cPlatDet){cPlatDet.destroy();cPlatDet=null;}if(cFuturo){cFuturo.destroy();cFuturo=null;}}
+function destroyCharts(){[cEvo,cCatPie,cBar,cPlatPie,cSav].forEach(c=>c&&c.destroy());if(cPlatDet){cPlatDet.destroy();cPlatDet=null;}if(cFuturo){cFuturo.destroy();cFuturo=null;}if(cAssetsOverview){cAssetsOverview.destroy();cAssetsOverview=null;}if(cPlatComparison){cPlatComparison.destroy();cPlatComparison=null;}if(cPlatContrib){cPlatContrib.destroy();cPlatContrib=null;}}
 function initCharts(){
   const bc=cd().bc;
   cEvo=mkC('cEvo','line',{labels:[],datasets:[]},lineOpts(null,true));
@@ -784,18 +1165,46 @@ function renderDash(){
   // Alert
   const daysSince=Math.floor((Date.now()-new Date(last.date).getTime())/86400000);
   const al=document.getElementById('dash-alert');
-  if(al){al.style.display=daysSince>35?'flex':'none';const at=document.getElementById('dash-alert-text');if(at)at.innerHTML=`<strong>Último registo há ${daysSince} dias.</strong> Atualiza o teu portfolio.`;}
+  if(al){al.style.display=daysSince>35?'flex':'none';const at=document.getElementById('dash-alert-text');if(at)at.innerHTML=`<strong>Last entry was ${daysSince} days ago.</strong> Update your portfolio.`;}
 
-  const dt=document.getElementById('dash-title');if(dt)dt.textContent=OPTS.name||'Portfolio';
-  const ds=document.getElementById('dash-sub');if(ds)ds.textContent=`Último: ${last.month} · ${E.length} registos`;
+  const dt=document.getElementById('dash-title');if(dt)dt.textContent=OPTS.name?`${OPTS.name}'s Portfolio`:'Portfolio';
+  const ds=document.getElementById('dash-sub');if(ds)ds.textContent=`Last entry: ${last.month} · ${E.length} records`;
+  // Hero KPIs
   const kt=document.getElementById('k-total');if(kt)kt.textContent=fEUR(cur);
-  const kts=document.getElementById('k-tsub');if(kts)kts.textContent=`${E.length} registos`;
+  const kts=document.getElementById('k-tsub');if(kts)kts.textContent=`${E.length} entries · started ${E[0].month}`;
   const ki=document.getElementById('k-inv');if(ki)ki.textContent=fEUR(totalInv);
-  const kg=document.getElementById('k-gain');if(kg){kg.textContent=fEUR(gain);kg.className='kv '+(gain>=0?'pos':'neg');}
-  const kgp=document.getElementById('k-gainpct');if(kgp)kgp.textContent=fPct(gainPct)+' retorno';
-  const kv=document.getElementById('k-var');if(kv){kv.textContent=fPct(varMes);kv.className='kv '+(varMes>=0?'pos':'neg');}
+  const kg=document.getElementById('k-gain');if(kg){kg.textContent=(gain>=0?'+':'')+fEUR(gain);kg.className='kv '+(gain>=0?'pos':'neg');}
+  const kgp=document.getElementById('k-gainpct');if(kgp)kgp.textContent=`${fPct(gainPct)} on invested capital`;
+  // Month change
+  const kv=document.getElementById('k-var');if(kv){kv.textContent=(varMes>=0?'+':'')+fPct(varMes);kv.className='kv '+(varMes>=0?'pos':'neg');}
+  const kvs=document.getElementById('k-varsub');if(kvs)kvs.textContent=prev?`vs ${prev.month}`:'first entry';
   const ks=document.getElementById('k-sav');if(ks){ks.textContent=savAvg.toFixed(1)+'%';ks.className='kv '+(savAvg>=20?'pos':savAvg>=10?'':'neg');}
-  const kst=document.getElementById('k-savtrend');if(kst)kst.textContent=`tendência ${trend>=0?'▲':'▼'} ${Math.abs(trend).toFixed(1)}pp`;
+  const kst=document.getElementById('k-savtrend');if(kst)kst.textContent=`trend ${trend>=0?'▲':'▼'} ${Math.abs(trend).toFixed(1)}pp`;
+  // FIRE callout
+  const fireExp=parseFloat(document.getElementById('p-fire-exp')?.value)||CFG.fire?.expense||2000;
+  const fireRate=parseFloat(document.getElementById('p-fire-rate')?.value)||CFG.fire?.rate||4;
+  const fireTarget=fireExp*12/(fireRate/100);
+  const fireProgress=Math.min(100,(cur/fireTarget)*100);
+  const fireEl=document.getElementById('fire-callout');
+  if(fireEl){
+    fireEl.style.display='block';
+    const rate=0.07,monthly=last.invested_month||500;
+    let val=cur,yr=new Date().getFullYear(),fireYr=null;
+    // Correct compound: grow monthly, add monthly contribution
+    for(let i=0;i<60;i++){
+      for(let m=0;m<12;m++){val=val*(1+rate/12)+monthly;}
+      yr++;
+      if(!fireYr&&val>=fireTarget){fireYr=yr;break;}
+    }
+    const age=OPTS.age||32;
+    const fireAge=fireYr?(age+(fireYr-new Date().getFullYear())):null;
+    document.getElementById('fire-callout-txt').textContent=fireYr?`Based on current savings, you can retire in ${fireYr}`:'Keep saving — FIRE target not yet in range';
+    document.getElementById('fire-callout-sub').textContent=`FIRE target: ${fEUR(fireTarget)} (${fEUR(fireExp)}/mo × ${(100/fireRate).toFixed(0)}×)`;
+    document.getElementById('fire-callout-yr').textContent=fireYr||'—';
+    document.getElementById('fire-callout-pctlbl').textContent=`${fEUR(cur)} of ${fEUR(fireTarget)}`;
+    document.getElementById('fire-callout-pct').textContent=fireProgress.toFixed(1)+'%';
+    document.getElementById('fire-callout-fill').style.width=fireProgress+'%';
+  }
 
   // Primary goal banner
   const gb=document.getElementById('goal-banner');
@@ -832,10 +1241,10 @@ function renderDash(){
 
   // Bar
   const lbl=E.map(e=>e.month.split(' ')[0].slice(0,3)+' '+e.month.split(' ')[1]?.slice(2));
-  upd(cBar,lbl,[{label:'Investido',data:E.map(e=>e.invested_month||0),backgroundColor:'rgba(91,111,255,.7)',borderRadius:4,borderSkipped:false}]);
+  upd(cBar,lbl,[{label:'Invested',data:E.map(e=>e.invested_month||0),backgroundColor:'rgba(91,111,255,.7)',borderRadius:4,borderSkipped:false}]);
 
   // Savings
-  upd(cSav,lbl,[{label:'%',data:E.map(e=>e.savings||0),borderColor:'#ffb547',backgroundColor:'rgba(255,181,71,.07)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#ffb547',borderWidth:2}]);
+  upd(cSav,lbl,[{label:'Savings %',data:E.map(e=>e.savings||0),borderColor:'#ffb547',backgroundColor:'rgba(255,181,71,.07)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#ffb547',borderWidth:2}]);
 
   // Platform table
   if(lastP){
@@ -870,7 +1279,7 @@ function updateEvo(){
 function renderHistory(){
   const list=document.getElementById('histList');if(!list)return;
   const E=[...DB.entries].reverse();
-  if(!E.length){list.innerHTML='<div class="empty">Sem registos</div>';return;}
+  if(!E.length){list.innerHTML='<div class="empty">No entries</div>';return;}
   list.innerHTML='';
   E.forEach((e,i)=>{
     const oi=DB.entries.length-1-i,prev=oi>0?DB.entries[oi-1]:null;
@@ -881,11 +1290,12 @@ function renderHistory(){
     d.innerHTML=`<div style="flex:1;cursor:pointer" onclick="openHistModal(${DB.entries.length-1-i})">
       <div style="font-size:13px;font-weight:700">${e.month}${e.note?` <span style="font-size:10px;color:var(--mu2);font-weight:400">💬 ${e.note}</span>`:''}
       </div>
-      <div style="font-size:10px;color:var(--mu2);margin-top:2px;font-family:var(--mo)">${e.date} · ${fEUR(inc)} rendimento · invest. ${fEUR(e.invested_month||0)}</div>
+      <div style="font-size:10px;color:var(--mu2);margin-top:2px;font-family:var(--mo)">${e.date} · ${fEUR(inc)} income · invested ${fEUR(e.invested_month||0)}</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <div style="text-align:right"><div class="mono" style="font-size:15px;font-weight:500">${fEUR(e.total)}</div><div class="mono" style="font-size:10px;margin-top:1px;color:${vc}">${vp===null?'—':fPct(vp)}</div></div>
-      <button class="btn-icon" onclick="event.stopPropagation();startEditEntry('${e.month}')" title="Editar">✏</button>
+      <button class="btn-icon" onclick="event.stopPropagation();startEditEntry('${e.month}')" title="Edit">✏</button>
+      <button class="btn-icon" style="color:var(--rd);border-color:rgba(255,77,106,.3)" onclick="event.stopPropagation();deleteEntry('${e.month}')" title="Delete">✕</button>
     </div>`;
     list.appendChild(d);
   });
@@ -909,18 +1319,18 @@ function openHistModal(idx){
   });
   // Income breakdown
   let incH='';
-  if(e.income&&e.income.length>1){incH=`<div class="mpsect">Fontes de rendimento</div><div class="mpdg">${e.income.map(i=>`<div class="mpdi"><div style="font-size:11px;font-weight:600">${i.label}</div><div class="mono" style="font-size:12px">${fEUR(i.amount)}</div></div>`).join('')}</div>`;}
+  if(e.income&&e.income.length>1){incH=`<div class="mpsect">Income sources</div><div class="mpdg">${e.income.map(i=>`<div class="mpdi"><div style="font-size:11px;font-weight:600">${i.label}</div><div class="mono" style="font-size:12px">${fEUR(i.amount)}</div></div>`).join('')}</div>`;}
   document.getElementById('modalContent').innerHTML=`
     <div class="mh"><div><div style="font-size:18px;font-weight:800">${e.month}</div><div style="font-size:10px;color:var(--mu2);margin-top:2px;font-family:var(--mo)">${e.date}</div></div>
-    <div style="display:flex;gap:6px"><button class="btn-edit" onclick="closeModal();startEditEntry('${e.month}')">✏ Editar</button><button class="mc" onclick="closeModal()">✕</button></div></div>
+    <div style="display:flex;gap:6px"><button class="btn-edit" onclick="closeModal();startEditEntry('${e.month}')">✏ Edit</button><button class="btn-del" style="padding:5px 10px" onclick="deleteEntry('${e.month}')">✕ Delete</button><button class="mc" onclick="closeModal()">✕</button></div></div>
     <div class="mkpis">
-      <div class="mkpi"><div class="mkl">Valor Total</div><div class="mkv" style="color:var(--ac)">${fEUR(e.total)}</div></div>
-      <div class="mkpi"><div class="mkl">Invest. Mês</div><div class="mkv">${fEUR(e.invested_month||0)}</div></div>
-      <div class="mkpi"><div class="mkl">Variação</div><div class="mkv" style="color:${vp===null?'var(--mu)':(vp>=0?'var(--gn)':'var(--rd)')}">${vp===null?'—':fPct(vp)}</div></div>
-      <div class="mkpi"><div class="mkl">Rendimento</div><div class="mkv">${fEUR(inc)}</div></div>
-      <div class="mkpi"><div class="mkl">% Poupança</div><div class="mkv">${e.savings||0}%</div></div>
-      <div class="mkpi"><div class="mkl">Investido Acum.</div><div class="mkv">${fEUR(totalInv)}</div></div>
-    </div>${incH}${ph||`<div style="color:var(--mu2);font-size:12px;padding:8px 0">Sem dados de plataformas.</div>`}${e.note?`<div style="margin-top:10px;padding:9px 12px;background:var(--sf2);border-radius:8px;font-size:12px;color:var(--mu2)">💬 ${e.note}</div>`:''}`;
+      <div class="mkpi"><div class="mkl">Total Value</div><div class="mkv" style="color:var(--ac)">${fEUR(e.total)}</div></div>
+      <div class="mkpi"><div class="mkl">Invested</div><div class="mkv">${fEUR(e.invested_month||0)}</div></div>
+      <div class="mkpi"><div class="mkl">Change</div><div class="mkv" style="color:${vp===null?'var(--mu)':(vp>=0?'var(--gn)':'var(--rd)')}">${vp===null?'—':fPct(vp)}</div></div>
+      <div class="mkpi"><div class="mkl">Income</div><div class="mkv">${fEUR(inc)}</div></div>
+      <div class="mkpi"><div class="mkl">Savings Rate</div><div class="mkv">${e.savings||0}%</div></div>
+      <div class="mkpi"><div class="mkl">Accum. Invested</div><div class="mkv">${fEUR(totalInv)}</div></div>
+    </div>${incH}${ph||`<div style="color:var(--mu2);font-size:12px;padding:8px 0">No platform data.</div>`}${e.note?`<div style="margin-top:10px;padding:9px 12px;background:var(--sf2);border-radius:8px;font-size:12px;color:var(--mu2)">💬 ${e.note}</div>`:''}`;
   document.getElementById('modalBg').style.display='flex';
 }
 function closeModal(){document.getElementById('modalBg').style.display='none';}
@@ -928,62 +1338,135 @@ function closeModal(){document.getElementById('modalBg').style.display='none';}
 // ═══════════════════════════════════════════
 // PLATFORM PAGE
 // ═══════════════════════════════════════════
-function buildPlatList(){
-  const list=document.getElementById('platList');if(!list)return;list.innerHTML='';
+function buildPlatList(){buildPlatCards();}
+
+function buildPlatCards(){
+  const grid=document.getElementById('platCards');if(!grid)return;
+  const lastEntry=DB.entries.length?DB.entries[DB.entries.length-1]:null;
+  const prevEntry=DB.entries.length>1?DB.entries[DB.entries.length-2]:null;
+  const totalAll=lastEntry?Math.max(1,PLATS().reduce((s,p)=>s+(lastEntry.platforms?.[p.id]||0),0)):1;
+  grid.innerHTML='';
   PLATS().forEach(p=>{
-    const li=document.createElement('div');li.className='plat-list-item'+(activePlatId===p.id?' on':'')+(p.active===false?' inactive':'');
-    li.innerHTML=`<span class="dot" style="background:${p.color};width:9px;height:9px"></span><div><div style="font-size:11px;font-weight:700">${p.name}</div><div style="font-size:9px;color:var(--mu2);margin-top:1px">${p.cat}</div></div>`;
-    li.onclick=()=>{activePlatId=p.id;buildPlatList();renderPlatDetail(p.id);};
-    list.appendChild(li);
+    const val=lastEntry?.platforms?.[p.id]||0;
+    const prevVal=prevEntry?.platforms?.[p.id]||0;
+    const change=prevVal>0?((val-prevVal)/prevVal*100):null;
+    const pct=(val/totalAll*100).toFixed(1);
+    const totalInvP=DB.entries.reduce((s,e)=>s+(e.platforms?.[p.id+'_inv']||0),0);
+    const gain=val-totalInvP;
+    const changeStr=change!=null
+      ?`<span class="${change>=0?'pos':'neg'}" style="font-weight:600">${change>=0?'+':''}${change.toFixed(1)}%</span> vs prev`
+      :'<span style="color:var(--mu2)">first entry</span>';
+    const card=document.createElement('div');
+    card.className='plat-card'+(activePlatId===p.id?' active':'');
+    card.style.setProperty('--c',p.color);
+    card.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="plat-card-name">${p.name}</div>
+          <div class="plat-card-cat">${p.cat}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mo);font-size:14px;font-weight:500;color:${p.color}">${val?fEUR(val):'—'}</div>
+          <div style="font-size:10px">${changeStr}</div>
+        </div>
+      </div>
+      <div class="plat-card-bar" style="margin-top:8px"><div class="plat-card-bar-fill"><div class="plat-card-bar-inner" style="width:${pct}%;background:${p.color}"></div></div></div>
+    `;
+    card.onclick=()=>{
+      activePlatId=p.id;
+      document.querySelectorAll('.plat-card').forEach(c2=>c2.classList.remove('active'));
+      card.classList.add('active');
+      const det=document.getElementById('platDetail');
+      if(det){det.style.display='block';setTimeout(()=>det.scrollIntoView({behavior:'smooth',block:'nearest'}),50);}
+      renderPlatDetail(p.id);
+    };
+    grid.appendChild(card);
+
   });
-  if(!activePlatId&&PLATS().length){activePlatId=PLATS()[0].id;buildPlatList();renderPlatDetail(activePlatId);}
-  else if(activePlatId)renderPlatDetail(activePlatId);
+  // If a platform was previously selected, show its detail
+  if(activePlatId){
+    const det=document.getElementById('platDetail');
+    if(det&&!det.innerHTML.trim()){renderPlatDetail(activePlatId);}
+  }
 }
 
 function renderPlatDetail(pid){
   const p=ALLPLATS().find(x=>x.id===pid);if(!p)return;
   const detail=document.getElementById('platDetail');if(!detail)return;
   const E=DB.entries.filter(e=>e.platforms&&(e.platforms[pid]||0)>0);
-  if(!E.length){detail.innerHTML=`<div class="card empty">Sem dados para ${p.name} ainda.<br>Adiciona entradas na página New Entry.</div>`;return;}
+  if(!E.length){detail.innerHTML=`<div class="empty" style="padding:32px">No data for ${p.name} yet.<br>Add entries in New Entry.</div>`;return;}
 
   const vals=E.map(e=>e.platforms[pid]||0);
-  const first=vals[0],last2=vals[vals.length-1];
+  const curVal=vals[vals.length-1];
+  const prevVal=vals.length>1?vals[vals.length-2]:null;
+  const change=prevVal!=null?(curVal-prevVal):null;
+  const changePct=prevVal&&prevVal>0?((curVal-prevVal)/prevVal*100):null;
   const totalInvP=DB.entries.reduce((s,e)=>s+(e.platforms?.[pid+'_inv']||0),0);
-  const gain=last2-totalInvP,ret=totalInvP>0?((gain/totalInvP)*100):0;
-
-  // Goals relevant to this platform? Show if any goal aligns with category
-  const relGoals=CFG.goals.filter(g=>g.cat===p.cat||!g.cat);
+  const gain=curVal-totalInvP,ret=totalInvP>0?((gain/totalInvP)*100):0;
+  const maxVal=Math.max(...vals),minVal=Math.min(...vals);
+  const lbl=E.map(e=>e.month.split(' ')[0].slice(0,3)+' '+e.month.split(' ')[1]?.slice(2));
+  const cumInvArr=E.map((e,i)=>E.slice(0,i+1).reduce((s,x)=>s+(x.platforms?.[pid+'_inv']||0),0));
 
   detail.innerHTML=`
-    <div class="g4">
-      <div class="kpi" style="border-left:3px solid ${p.color}"><div class="kl">Valor Atual</div><div class="kv" style="color:${p.color}">${fEUR(last2)}</div><div class="ks">último registo</div></div>
-      <div class="kpi"><div class="kl">Total Investido</div><div class="kv">${fEUR(totalInvP)}</div><div class="ks">capital próprio</div></div>
-      <div class="kpi ${gain>=0?'gn':'rd'}"><div class="kl">Ganho</div><div class="kv ${gain>=0?'pos':'neg'}">${gain>=0?'+':''}${fEUR(gain)}</div><div class="ks">${fPct(ret)} retorno</div></div>
-      <div class="kpi"><div class="kl">Registos</div><div class="kv">${E.length}</div><div class="ks">${E[0].month} → ${E[E.length-1].month}</div></div>
+    <div class="g2 mb" style="gap:10px">
+      <div class="kpi" style="border-left:3px solid ${p.color};padding:16px 18px">
+        <div class="kl">Current Value</div>
+        <div class="kv" style="color:${p.color};font-size:22px">${fEUR(curVal)}</div>
+        <div class="ks" style="margin-top:4px">${change!=null?`${change>=0?'+':''}${fEUR(change)} (${fPct(changePct)}) vs prev`:'first entry'}</div>
+      </div>
+      <div class="kpi ${gain>=0?'gn':'rd'}" style="padding:16px 18px">
+        <div class="kl">Total Return</div>
+        <div class="kv ${gain>=0?'pos':'neg'}" style="font-size:22px">${gain>=0?'+':''}${fEUR(gain)}</div>
+        <div class="ks" style="margin-top:4px">${fPct(ret)} on ${fEUR(totalInvP)} invested</div>
+      </div>
     </div>
-    <div class="card">
-      <div class="ct">${p.name} — evolução do valor</div>
-      <div class="chart-wrap"><canvas id="cPlatDet"></canvas></div>
+    <div class="g3 mb" style="gap:10px">
+      <div class="kpi"><div class="kl">Total Invested</div><div class="kv">${fEUR(totalInvP)}</div><div class="ks">contributions</div></div>
+      <div class="kpi"><div class="kl">All-time High</div><div class="kv">${fEUR(maxVal)}</div><div class="ks">${E[vals.indexOf(maxVal)]?.month||'—'}</div></div>
+      <div class="kpi"><div class="kl">Entries</div><div class="kv">${E.length}</div><div class="ks">${E[0].month} → ${E[E.length-1].month}</div></div>
+    </div>
+    <div class="g2 mb" style="gap:12px">
+      <div class="card">
+        <div class="ct" style="margin-bottom:10px">Value vs Invested</div>
+        <div class="chart-wrap"><canvas id="cPlatDet"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:10px">Monthly Contributions</div>
+        <div class="chart-wrap"><canvas id="cPlatContrib"></canvas></div>
+      </div>
     </div>
     <div class="tcard">
-      <div class="th2"><div class="ttl">Histórico de entradas</div></div>
-      <table><thead><tr><th>Mês</th><th class="mono">Invest. Mês</th><th class="mono">Valor Total</th><th class="mono">Retorno Acum.</th></tr></thead>
+      <div class="th2"><div class="ttl">Entry History</div></div>
+      <table><thead><tr><th>Month</th><th class="mono">Contributed</th><th class="mono">Value</th><th class="mono">Cumul. Invested</th><th class="mono">Return</th></tr></thead>
       <tbody>${[...E].reverse().map(e=>{
-        const v=e.platforms[pid]||0;const inv=e.platforms[pid+'_inv']||0;
+        const v=e.platforms[pid]||0;
+        const inv=e.platforms[pid+'_inv']||0;
         const cumInv=DB.entries.slice(0,DB.entries.indexOf(e)+1).reduce((s,x)=>s+(x.platforms?.[pid+'_inv']||0),0);
         const r=cumInv>0?((v-cumInv)/cumInv*100):0;
-        return`<tr><td>${e.month}</td><td class="mono" style="color:var(--mu2)">${inv>0?'+'+fEUR(inv):'—'}</td><td class="mono">${fEUR(v)}</td><td class="mono ${r>=0?'pos':'neg'}">${fPct(r)}</td></tr>`;
+        return`<tr>
+          <td>${e.month}</td>
+          <td class="mono" style="color:var(--mu2)">${inv>0?'+'+fEUR(inv):'—'}</td>
+          <td class="mono">${fEUR(v)}</td>
+          <td class="mono" style="color:var(--mu2)">${cumInv>0?fEUR(cumInv):'—'}</td>
+          <td class="mono ${r>=0?'pos':'neg'}">${cumInv>0?fPct(r):'—'}</td>
+        </tr>`;
       }).join('')}</tbody></table>
     </div>`;
 
-  // Create chart AFTER innerHTML so canvas exists in DOM
+  // Charts after innerHTML
   if(cPlatDet){cPlatDet.destroy();cPlatDet=null;}
-  cPlatDet=mkC('cPlatDet','line',{labels:[],datasets:[]},lineOpts(null,totalInvP>0));
-  const lbl=E.map(e=>e.month.split(' ')[0].slice(0,3)+' '+e.month.split(' ')[1]?.slice(2));
-  const cumInvArr=E.map((e,i)=>E.slice(0,i+1).reduce((s,x)=>s+(x.platforms?.[pid+'_inv']||0),0));
-  const ds=[{label:p.name,data:E.map(e=>e.platforms[pid]||0),borderColor:p.color,backgroundColor:p.color+'18',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:p.color,borderWidth:2.5}];
-  if(totalInvP>0)ds.push({label:'Investido acum.',data:cumInvArr,borderColor:'rgba(148,163,184,.5)',borderDash:[4,3],fill:false,tension:.4,pointRadius:0,borderWidth:1.5});
-  upd(cPlatDet,lbl,ds);
+  cPlatDet=new Chart(document.getElementById('cPlatDet'),{type:'line',data:{labels:lbl,datasets:[
+    {label:p.name,data:E.map(e=>e.platforms[pid]||0),borderColor:p.color,backgroundColor:p.color+'18',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:p.color,borderWidth:2.5},
+    ...(totalInvP>0?[{label:'Invested',data:cumInvArr,borderColor:'rgba(148,163,184,.4)',borderDash:[4,3],fill:false,tension:.4,pointRadius:0,borderWidth:1.5}]:[])
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:totalInvP>0,labels:{font:{size:10},color:'#7a87a8',boxWidth:12}}},
+    scales:{x:{ticks:{font:{size:9},color:'#7a87a8'},grid:{display:false}},y:{ticks:{font:{size:9},color:'#7a87a8',callback:v=>'€'+v.toLocaleString()},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+  if(cPlatContrib){cPlatContrib.destroy();cPlatContrib=null;}
+  const contribs=E.map(e=>e.platforms?.[pid+'_inv']||0);
+  cPlatContrib=new Chart(document.getElementById('cPlatContrib'),{type:'bar',data:{labels:lbl,datasets:[
+    {label:'Contribution',data:contribs,backgroundColor:p.color+'99',borderRadius:4,borderSkipped:false}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{ticks:{font:{size:9},color:'#7a87a8'},grid:{display:false}},y:{ticks:{font:{size:9},color:'#7a87a8',callback:v=>'€'+v},grid:{color:'rgba(255,255,255,.04)'}}}}});
 }
 
 // ═══════════════════════════════════════════
@@ -1014,7 +1497,7 @@ function openAddGoal(){
     <div style="display:flex;flex-direction:column;gap:10px">
       <div class="field"><label>Nome</label><input type="text" id="gn" placeholder="ex: 100k aos 45"></div>
       <div class="g2"><div class="field"><label>Valor alvo (€)</label><input type="number" id="gt" placeholder="100000"></div><div class="field"><label>Idade alvo</label><input type="number" id="ga" placeholder="45"></div></div>
-      <button class="btn" onclick="addGoal()" style="margin-top:6px">Guardar</button>
+      <button class="btn" onclick="addGoal()" style="margin-top:6px">Save Goal</button>
     </div>`;
   document.getElementById('modalBg').style.display='flex';
 }
@@ -1025,13 +1508,13 @@ function openEditGoal(i){
     <div style="display:flex;flex-direction:column;gap:10px">
       <div class="field"><label>Nome</label><input type="text" id="ge-n" value="${g.name}"></div>
       <div class="g2"><div class="field"><label>Valor alvo (€)</label><input type="number" id="ge-t" value="${g.target}"></div><div class="field"><label>Idade alvo</label><input type="number" id="ge-a" value="${g.age}"></div></div>
-      <button class="btn" onclick="saveEditGoal(${i})" style="margin-top:6px">Guardar</button>
+      <button class="btn" onclick="saveEditGoal(${i})" style="margin-top:6px">Save Goal</button>
     </div>`;
   document.getElementById('modalBg').style.display='flex';
 }
-function addGoal(){const n=document.getElementById('gn')?.value.trim(),t=parseFloat(document.getElementById('gt')?.value)||0,a=parseInt(document.getElementById('ga')?.value)||0;if(!n||!t){toast('Fill in name and value',true);return;}CFG.goals.push({name:n,target:t,age:a});saveCFG();closeModal();renderGoals();buildGoalMgr();populateGoalSelect();renderDash();renderFuturo();toast('Goal saved ✓');}
-function saveEditGoal(i){const n=document.getElementById('ge-n')?.value.trim(),t=parseFloat(document.getElementById('ge-t')?.value)||0,a=parseInt(document.getElementById('ge-a')?.value)||0;if(!n||!t){toast('Preenche',true);return;}CFG.goals[i]={name:n,target:t,age:a};saveCFG();closeModal();renderGoals();buildGoalMgr();populateGoalSelect();renderDash();renderFuturo();toast('Updated ✓');}
-function removeGoal(i){CFG.goals.splice(i,1);saveCFG();renderGoals();buildGoalMgr();populateGoalSelect();renderDash();renderFuturo();}
+function addGoal(){const n=document.getElementById('gn')?.value.trim(),t=parseFloat(document.getElementById('gt')?.value)||0,a=parseInt(document.getElementById('ga')?.value)||0;if(!n||!t){toast('Fill in name and value',true);return;}CFG.goals.push({name:n,target:t,age:a});saveCFG();closeModal();renderGoals();populateGoalSelect();renderDash();renderFuturo();toast('Goal saved ✓');}
+function saveEditGoal(i){const n=document.getElementById('ge-n')?.value.trim(),t=parseFloat(document.getElementById('ge-t')?.value)||0,a=parseInt(document.getElementById('ge-a')?.value)||0;if(!n||!t){toast('Fill in name and value',true);return;}CFG.goals[i]={name:n,target:t,age:a};saveCFG();closeModal();renderGoals();populateGoalSelect();renderDash();renderFuturo();toast('Updated ✓');}
+function removeGoal(i){CFG.goals.splice(i,1);saveCFG();renderGoals();populateGoalSelect();renderDash();renderFuturo();}
 
 // ═══════════════════════════════════════════
 // FUTURO (Projeção + FIRE)
@@ -1078,9 +1561,9 @@ function renderFuturo(){
 
   // 3 scenario cards
   const scens=[
-    {k:'pess',label:'Pessimista',r:Math.max(rate-.02,.01),color:'var(--rd)'},
+    {k:'pess',label:'Pessimistic',r:Math.max(rate-.02,.01),color:'var(--rd)'},
     {k:'base',label:'Base',r:rate,color:'var(--ac)'},
-    {k:'opt',label:'Optimista',r:rate+.02,color:'var(--gn)'},
+    {k:'opt',label:'Optimistic',r:rate+.02,color:'var(--gn)'},
   ];
   const sc=document.getElementById('scenCards');
   if(sc)sc.innerHTML=scens.map(s=>{
@@ -1108,8 +1591,8 @@ function renderFuturo(){
   const chartLbls=chartRows.map(r=>r.yr);
   const ds=[];
   if(activeScens.has('base'))ds.push({label:'Base',data:chartRows.map(r=>r.val),borderColor:'#00d97e',fill:false,tension:.4,pointRadius:0,borderWidth:2.5});
-  if(activeScens.has('pess'))ds.push({label:'Pessimista',data:chartRowsPess.map(r=>r.val),borderColor:'var(--rd)',borderDash:[4,3],fill:false,tension:.4,pointRadius:0,borderWidth:1.5});
-  if(activeScens.has('opt'))ds.push({label:'Optimista',data:chartRowsOpt.map(r=>r.val),borderColor:'var(--ac)',borderDash:[2,4],fill:false,tension:.4,pointRadius:0,borderWidth:1.5});
+  if(activeScens.has('pess'))ds.push({label:'Pessimistic',data:chartRowsPess.map(r=>r.val),borderColor:'var(--rd)',borderDash:[4,3],fill:false,tension:.4,pointRadius:0,borderWidth:1.5});
+  if(activeScens.has('opt'))ds.push({label:'Optimistic',data:chartRowsOpt.map(r=>r.val),borderColor:'var(--ac)',borderDash:[2,4],fill:false,tension:.4,pointRadius:0,borderWidth:1.5});
   // Goals as horizontal reference lines + FIRE
   ds.push({label:`FIRE (${fEUR(Math.round(fireNum))})`,data:chartRows.map(()=>fireNum),borderColor:'rgba(0,217,126,.35)',borderDash:[6,3],fill:false,pointRadius:0,borderWidth:1});
   CFG.goals.forEach(g=>{ds.push({label:`Meta: ${g.name} (${fEUR(g.target)})`,data:chartRows.map(()=>g.target),borderColor:'rgba(255,181,71,.5)',borderDash:[3,5],fill:false,pointRadius:0,borderWidth:1});});
@@ -1187,17 +1670,67 @@ function calcSav(){
 
 function buildPlatGrid(existing){
   const grid=document.getElementById('platGrid');if(!grid)return;grid.innerHTML='';
-  PLATS().forEach(p=>{
+  const normalPlats=PLATS().filter(p=>!p.isAsset);
+  const assetPlats=PLATS().filter(p=>p.isAsset);
+  // Section header helper
+  function addSection(icon,label,sub){
+    const s=document.createElement('div');
+    s.style.cssText='grid-column:1/-1;padding:10px 0 4px;border-top:1px solid var(--bd);margin-top:4px';
+    s.innerHTML=`<div style="display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2)">${icon} ${label} <span style="font-weight:400;color:var(--mu)">${sub}</span></div>`;
+    grid.appendChild(s);
+  }
+  if(normalPlats.length) addSection('▣','Platforms','— current value + contribution');
+  normalPlats.forEach(p=>{buildPlatCard(p,existing,grid);});
+  if(assetPlats.length) addSection('◆','Assets','— quantity + buy price');
+  assetPlats.forEach(p=>{buildPlatCard(p,existing,grid);});
+}
+function buildPlatCard(p,existing,grid){
     const prev=existing?(existing.platforms?.[p.id]||0):0;
     const prevInv=existing?(existing.platforms?.[p.id+'_inv']||0):0;
+    // Check if this platform is configured as an individual holding
+    const isHolding=p.isAsset===true;
+    const platHoldings=isHolding?[p]:[];
     const d=document.createElement('div');d.className='pf';
-    d.innerHTML=`<div class="pfname"><span class="dot" style="background:${p.color};width:8px;height:8px;margin-right:2px"></span>${p.name}<span class="badge" style="background:${catBg(p.cat)};color:${catColor(p.cat)};font-size:8px">${p.cat}</span></div>
-      <div class="pins">
-        <div><div class="slabel">Invest. Mês</div><input type="number" id="pi_inv_${p.id}" value="${prevInv||''}" placeholder="0" oninput="calcSav()"></div>
-        <div><div class="slabel">Total Atual</div><input type="number" id="pi_tot_${p.id}" value="${prev||''}" placeholder="${prev||0}"></div>
-      </div>`;
+    const header=`<div class="pfname"><span class="dot" style="background:${p.color};width:8px;height:8px;margin-right:2px"></span>${p.name}<span class="badge" style="background:${catBg(p.cat)};color:${catColor(p.cat)};font-size:8px">${p.cat}</span>${isHolding?'<span class="badge" style="background:rgba(99,112,255,.15);color:var(--ac);font-size:8px;margin-left:2px">Holdings</span>':''}</div>`;
+    if(isHolding){
+      // Show each holding with qty + price fields
+      // For a holding platform, p itself is the asset
+      const hid=p.id;
+      const prevPos=existing?.holdings_pos?.[hid]||{};
+      const holdingFields=`
+        <div><div class="slabel">Qty / Units</div><input type="number" id="ph_qty_${hid}" value="${prevPos.qty||''}" placeholder="0" step="any" oninput="calcHoldingTotal('${p.id}')"></div>
+        <div><div class="slabel">Avg. Buy Price (€)</div><input type="number" id="ph_buy_${hid}" value="${prevPos.buyPrice||''}" placeholder="0" step="any" oninput="calcHoldingTotal('${p.id}')"></div>
+      `;
+      d.innerHTML=`${header}
+        ${p.ticker?`<div style="font-size:9px;color:var(--mu2);margin-bottom:6px;font-family:var(--mo)">${p.ticker}${p.where?' · '+p.where:''}</div>`:''}
+        <div class="pins" id="pins_${p.id}">
+          ${holdingFields}
+          <div style="grid-column:1/-1"><div class="slabel">Invested This Month (€)</div><input type="number" id="pi_inv_${p.id}" value="${prevInv||''}" placeholder="0" oninput="calcSav()"></div>
+          <div style="grid-column:1/-1"><div class="slabel">Current Value</div><div class="savbox" style="padding:6px 10px"><span class="mono" id="ph_total_${p.id}" style="font-size:13px;color:var(--gn)">—</span><input type="hidden" id="pi_tot_${p.id}" value="${prev||0}"></div></div>
+        </div>`;
+      setTimeout(()=>calcHoldingTotal(p.id),0);
+    } else {
+      d.innerHTML=`${header}
+        <div class="pins">
+          <div><div class="slabel">Invested</div><input type="number" id="pi_inv_${p.id}" value="${prevInv||''}" placeholder="0" oninput="calcSav()"></div>
+          <div><div class="slabel">Total Atual</div><input type="number" id="pi_tot_${p.id}" value="${prev||''}" placeholder="${prev||0}"></div>
+        </div>`;
+    }
     grid.appendChild(d);
-  });
+}
+
+function calcHoldingTotal(platId){
+  const p=CFG.platforms.find(x=>x.id===platId);
+  if(!p)return;
+  const qty=parseFloat(document.getElementById('ph_qty_'+platId)?.value)||0;
+  const buyPrice=parseFloat(document.getElementById('ph_buy_'+platId)?.value)||0;
+  const curPrice=p.currentPrice||buyPrice;
+  const total=qty*curPrice;
+  const totalEl=document.getElementById('ph_total_'+platId);
+  const hiddenEl=document.getElementById('pi_tot_'+platId);
+  if(totalEl)totalEl.textContent=total>0?fEUR(total):'—';
+  if(hiddenEl)hiddenEl.value=total||0;
+  calcSav();
 }
 
 function startEditEntry(month){
@@ -1209,15 +1742,24 @@ function startEditEntry(month){
   const fn=document.getElementById('f-note');if(fn)fn.value=entry.note||'';
   buildIncomeRows(entry.income||[{label:'Salary',amount:entry.salary||0}]);
   buildPlatGrid(entry);
+  entryGoStep(1);
   const et=document.getElementById('entrada-title');if(et)et.textContent=`Edit — ${month}`;
   const sb=document.getElementById('saveBtnTxt');if(sb)sb.textContent='Save changes';
   const cb=document.getElementById('cancelEditBtn');if(cb)cb.style.display='inline-flex';
 }
 function cancelEdit(){
-  editingMonth=null;clearForm();
-  const et=document.getElementById('entrada-title');if(et)et.textContent='New Entry';
-  const sb=document.getElementById('saveBtnTxt');if(sb)sb.textContent='Guardar';
+  editingMonth=null;
+  clearForm();
+  const et=document.getElementById('entrada-title');if(et)et.textContent=t('entry_title');
+  const sb=document.getElementById('saveBtnTxt');if(sb)sb.textContent=t('entry_save');
   const cb=document.getElementById('cancelEditBtn');if(cb)cb.style.display='none';
+  // Go back to history
+  nav('historico',document.querySelectorAll('.ni')[2]);
+}
+function deleteEntry(month){
+  if(!confirm(`Delete entry for ${month}?`))return;
+  DB.entries=DB.entries.filter(e=>e.month!==month);
+  closeModal();saveDB();renderAll();renderHistory();toast(`${month} deleted`);
 }
 function saveEntry(){
   const month=document.getElementById('f-month')?.value.trim();
@@ -1225,29 +1767,36 @@ function saveEntry(){
   const note=document.getElementById('f-note')?.value.trim()||'';
   if(!month||!date){toast('Fill in month and date',true);return;}
   const platforms={};let platTotal=0,inv2=0;
+  const holdings_pos={};
   PLATS().forEach(p=>{
     const inv=parseFloat(document.getElementById('pi_inv_'+p.id)?.value)||0;
     const tot=parseFloat(document.getElementById('pi_tot_'+p.id)?.value)||0;
     platforms[p.id]=tot;platforms[p.id+'_inv']=inv;platTotal+=tot;inv2+=inv;
+    // Save holdings position if this platform is a holding
+    if(p.isAsset){
+      const qty=parseFloat(document.getElementById('ph_qty_'+p.id)?.value)||0;
+      const buyPrice=parseFloat(document.getElementById('ph_buy_'+p.id)?.value)||0;
+      if(qty||buyPrice) holdings_pos[p.id]={qty,buyPrice};
+    }
   });
   const income=incomeData.filter(r=>r.amount>0);
   const totalInc=income.reduce((s,r)=>s+(r.amount||0),0);
   const savings=totalInc>0?Math.round((inv2/totalInc)*100):0;
   const last2=DB.entries.length?DB.entries[DB.entries.length-1]:null;
   const finalTotal=platTotal>0?platTotal:(last2&&last2.month!==month?last2.total+inv2:inv2);
-  const entry={month,date,salary:totalInc,income,savings,platforms,invested_month:Math.round(inv2),total:Math.round(finalTotal),note};
+  const entry={month,date,salary:totalInc,income,savings,platforms,holdings_pos,invested_month:Math.round(inv2),total:Math.round(finalTotal),note};
   const idx=DB.entries.findIndex(e=>e.month===month);
-  if(idx>=0){DB.entries[idx]=entry;toast(`${month} updated ✓`);}
-  else{DB.entries.push(entry);DB.entries.sort((a,b)=>a.date.localeCompare(b.date));toast(`${month} saved ✓`);}
+  if(idx>=0){DB.entries[idx]=entry;toast(`${month} ${t('updated')}`);}
+  else{DB.entries.push(entry);DB.entries.sort((a,b)=>a.date.localeCompare(b.date));toast(`${month} ${t('saved')}`);}
   editingMonth=null;saveDB();renderAll();cancelEdit();
 }
 function clearForm(){
   ['f-month','f-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const fd=document.getElementById('f-date');if(fd)fd.value=new Date().toISOString().slice(0,10);
   const sd=document.getElementById('savDisplay');if(sd){sd.textContent='—';sd.style.color='var(--mu2)';}
-  buildIncomeRows(null);buildPlatGrid(null);cancelEdit();
+  buildIncomeRows(null);buildPlatGrid(null);entryGoStep(1);
   const last2=DB.entries.length?DB.entries[DB.entries.length-1]:null;
-  const eh=document.getElementById('entryHint');if(eh&&last2)eh.textContent=`Último: ${last2.month} — ${fEUR(last2.total)}`;
+  const eh=document.getElementById('entryHint');if(eh&&last2)eh.textContent=`Last: ${last2.month} — ${fEUR(last2.total)}`;
 }
 
 // ═══════════════════════════════════════════
@@ -1275,20 +1824,192 @@ function saveEditCat(i){const n=document.getElementById('cen')?.value.trim(),c=d
 function removeCat(i){const c=CFG.categories[i];if(CFG.platforms.some(p=>p.cat===c.id)&&!confirm(`"${c.label}" tem plataformas. Remove na mesma?`))return;CFG.categories.splice(i,1);saveCFG();buildManagers();renderAll();}
 function updCatColor(i,color){CFG.categories[i].color=color;saveCFG();buildManagers();renderAll();}
 
-function buildAssetMgr(){
-  const div=document.getElementById('assetManager');if(!div)return;div.innerHTML='';
-  if(!CFG.platforms.length){div.innerHTML='<div style="padding:12px 14px;color:var(--mu2);font-size:11px">Sem plataformas.</div>';return;}
-  CFG.platforms.forEach((p,i)=>{
+function buildPlatMgr(){
+  const div=document.getElementById('platManager');if(!div)return;div.innerHTML='';
+  const plats=CFG.platforms.filter(p=>!p.isAsset);
+  if(!plats.length){div.innerHTML='<div style="padding:12px 14px;color:var(--mu2);font-size:11px">No platforms yet.</div>';return;}
+  plats.forEach((p,_)=>{
+    const i=CFG.platforms.indexOf(p);
     const r=document.createElement('div');r.className='arow'+(p.active===false?' irow':'');
-    r.innerHTML=`<div style="display:flex;align-items:center;gap:8px"><input type="color" value="${p.color}" onchange="updPlatColor(${i},this.value)" style="width:24px;height:20px"><span class="dot" style="background:${p.color};width:8px;height:8px"></span><strong style="font-size:12px">${p.name}</strong><span class="badge" style="background:${catBg(p.cat)};color:${catColor(p.cat)}">${p.cat}</span>${p.active===false?`<span style="font-size:9px;color:var(--am)">Inativa</span>`:''}</div>
-    <div style="display:flex;gap:6px;align-items:center"><label class="toggle"><input type="checkbox" ${p.active!==false?'checked':''} onchange="togglePlat(${i},this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label><button class="btn-edit" onclick="openEditPlat(${i})">✏</button><button class="btn-del" onclick="removePlat(${i})">✕</button></div>`;
+    r.innerHTML=`<div style="display:flex;align-items:center;gap:9px">
+      <span>▣</span>
+      <span class="dot" style="background:${p.color};width:10px;height:10px"></span>
+      <div><strong style="font-size:12px">${p.name}</strong><div style="font-size:9px;color:var(--mu2)">${p.cat}</div></div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <label class="toggle"><input type="checkbox" ${p.active!==false?'checked':''} onchange="togglePlat(${i},this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
+      <button class="btn-edit" onclick="openEditPlat(${i})">✏</button>
+      <button class="btn-del" onclick="removePlat(${i})">✕</button>
+    </div>`;
     div.appendChild(r);
   });
 }
-function openAddAsset(){document.getElementById('modalContent').innerHTML=`<div class="mh"><div style="font-size:17px;font-weight:800">+ Platform</div><button class="mc" onclick="closeModal()">✕</button></div><div style="display:flex;flex-direction:column;gap:10px"><div class="field"><label>Nome</label><input type="text" id="an" placeholder="e.g. Fidelity 401k"></div><div class="g2"><div class="field"><label>Categoria</label><select id="ac">${CFG.categories.map(c=>`<option value="${c.id}">${c.label}</option>`).join('')}</select></div><div class="field"><label>Cor</label><input type="color" id="acol" value="#5b6fff" style="height:36px;padding:2px 4px"></div></div><div class="field"><label>Internal ID (no spaces, e.g. fidelity_401k)</label><input type="text" id="aid" placeholder="fidelity_401k"></div><button class="btn" onclick="addPlat()" style="margin-top:6px">Guardar</button></div>`;document.getElementById('modalBg').style.display='flex';}
-function openEditPlat(i){const p=CFG.platforms[i];document.getElementById('modalContent').innerHTML=`<div class="mh"><div style="font-size:17px;font-weight:800">Edit platform</div><button class="mc" onclick="closeModal()">✕</button></div><div style="display:flex;flex-direction:column;gap:10px"><div class="field"><label>Nome</label><input type="text" id="aen" value="${p.name}"></div><div class="g2"><div class="field"><label>Categoria</label><select id="aec">${CFG.categories.map(c=>`<option value="${c.id}" ${c.id===p.cat?'selected':''}>${c.label}</option>`).join('')}</select></div><div class="field"><label>Cor</label><input type="color" id="aecol" value="${p.color}" style="height:36px;padding:2px 4px"></div></div><button class="btn" onclick="saveEditPlat(${i})" style="margin-top:6px">Guardar</button></div>`;document.getElementById('modalBg').style.display='flex';}
-function addPlat(){const n=document.getElementById('an')?.value.trim(),cat=document.getElementById('ac')?.value,col=document.getElementById('acol')?.value,id=document.getElementById('aid')?.value.trim().replace(/[^a-z0-9_]/gi,'_');if(!n||!id){toast('Fill in name and ID',true);return;}if(CFG.platforms.find(p=>p.id===id)){toast('ID already exists',true);return;}CFG.platforms.push({id,name:n,cat,color:col,active:true});saveCFG();closeModal();buildManagers();buildPlatGrid(null);toast(`${n} added ✓`);}
-function saveEditPlat(i){const n=document.getElementById('aen')?.value.trim(),cat=document.getElementById('aec')?.value,col=document.getElementById('aecol')?.value;if(!n)return;CFG.platforms[i]={...CFG.platforms[i],name:n,cat,color:col};saveCFG();closeModal();buildManagers();buildPlatGrid(null);renderAll();toast('Editada ✓');}
+
+function buildAssetItemMgr(){
+  const div=document.getElementById('assetItemManager');if(!div)return;div.innerHTML='';
+  const assets=ASSETS();
+  if(!assets.length){div.innerHTML='<div style="padding:12px 14px;color:var(--mu2);font-size:11px">No assets yet. Add ETFs, stocks or crypto to track their price and position.</div>';return;}
+  assets.forEach((p,_)=>{
+    const i=CFG.platforms.indexOf(p);
+    const typeBadge={etf:'ETF',crypto:'Crypto',other:'Other'}[p.assetType]||'—';
+    const typeColor={etf:'var(--ac)',crypto:'var(--am)',other:'var(--mu2)'}[p.assetType]||'var(--mu2)';
+    const r=document.createElement('div');r.className='arow';
+    r.innerHTML=`<div style="display:flex;align-items:center;gap:9px">
+      <span>◆</span>
+      <span class="dot" style="background:${p.color};width:10px;height:10px"></span>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <strong style="font-size:12px">${p.name}</strong>
+          <span style="font-family:var(--mo);font-size:9px;padding:1px 6px;border-radius:4px;background:rgba(99,112,255,.1);color:${typeColor}">${typeBadge}</span>
+          ${p.ticker?`<span style="font-family:var(--mo);font-size:9px;color:var(--mu2)">${p.ticker}</span>`:''}
+        </div>
+        ${p.where?`<div style="font-size:9px;color:var(--mu2)">📍 ${p.where}</div>`:''}
+      </div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="btn-edit" onclick="openEditPlat(${i})">✏</button>
+      <button class="btn-del" onclick="removePlat(${i})">✕</button>
+    </div>`;
+    div.appendChild(r);
+  });
+}
+
+// openAddPlatform — normal platform, no isAsset
+function openAddPlatform(){
+  document.getElementById('modalContent').innerHTML=`
+    <div class="mh"><div style="font-size:17px;font-weight:800">🏦 Add Platform</div><button class="mc" onclick="closeModal()">✕</button></div>
+    <div style="font-size:12px;color:var(--mu2);margin-bottom:14px">A place where you hold money — broker, bank, wallet.</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="field"><label>Name</label><input type="text" id="an" placeholder="e.g. DEGIRO, Revolut, Kraken"></div>
+      <div class="g2">
+        <div class="field"><label>Category</label><select id="ac">${CFG.categories.map(cat=>`<option value="${cat.id}">${cat.label}</option>`).join('')}</select></div>
+        <div class="field"><label>Colour</label><input type="color" id="acol" value="#5b6fff" style="height:36px;padding:2px 4px"></div>
+      </div>
+      <div class="field"><label>Internal ID (no spaces)</label><input type="text" id="aid" placeholder="e.g. degiro"></div>
+      <button class="btn" onclick="addPlatform()" style="margin-top:4px">Save Platform</button>
+    </div>`;
+  document.getElementById('modalBg').style.display='flex';
+}
+
+// openAddAssetItem — individual asset with ticker
+function openAddAssetItem(){
+  document.getElementById('modalContent').innerHTML=`
+    <div class="mh"><div style="font-size:17px;font-weight:800">📈 Add Asset</div><button class="mc" onclick="closeModal()">✕</button></div>
+    <div style="font-size:12px;color:var(--mu2);margin-bottom:14px">An individual position — ETF, stock or crypto.</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="field"><label>Name</label><input type="text" id="an" placeholder="e.g. iShares Core MSCI World"></div>
+      <div class="g2">
+        <div class="field"><label>Ticker / ISIN</label><input type="text" id="aTicker" placeholder="e.g. IWDA.L"></div>
+        <div class="field"><label>Type</label><select id="aType">
+          <option value="etf">ETF / Stock</option>
+          <option value="crypto">Crypto</option>
+          <option value="other">Other</option>
+        </select></div>
+      </div>
+      <div class="field"><label>Where is it held?</label><input type="text" id="aWhere" placeholder="e.g. DEGIRO, Kraken..."></div>
+      <div class="g2">
+        <div class="field"><label>Category</label><select id="ac">${CFG.categories.map(cat=>`<option value="${cat.id}">${cat.label}</option>`).join('')}</select></div>
+        <div class="field"><label>Colour</label><input type="color" id="acol" value="#00d97e" style="height:36px;padding:2px 4px"></div>
+      </div>
+      <div class="field"><label>Internal ID (no spaces)</label><input type="text" id="aid" placeholder="e.g. iwda_degiro"></div>
+      <button class="btn" onclick="addAssetItem()" style="margin-top:4px">Save Asset</button>
+    </div>`;
+  document.getElementById('modalBg').style.display='flex';
+}
+
+function addPlatform(){
+  const n=document.getElementById('an')?.value.trim();
+  const cat=document.getElementById('ac')?.value;
+  const col=document.getElementById('acol')?.value;
+  const id=document.getElementById('aid')?.value.trim().replace(/[^a-z0-9_]/gi,'_');
+  if(!n||!id){toast('Fill in name and ID',true);return;}
+  if(CFG.platforms.find(p=>p.id===id)){toast('ID already exists',true);return;}
+  CFG.platforms.push({id,name:n,cat,color:col,active:true,isAsset:false});
+  saveCFG();closeModal();buildAssetMgr();buildPlatGrid(null);renderAssets();toast(`${n} added ✓`);
+}
+
+function addAssetItem(){
+  const n=document.getElementById('an')?.value.trim();
+  const ticker=document.getElementById('aTicker')?.value.trim()||'';
+  const assetType=document.getElementById('aType')?.value||'etf';
+  const where=document.getElementById('aWhere')?.value.trim()||'';
+  const cat=document.getElementById('ac')?.value;
+  const col=document.getElementById('acol')?.value;
+  const id=document.getElementById('aid')?.value.trim().replace(/[^a-z0-9_]/gi,'_');
+  if(!n||!id){toast('Fill in name and ID',true);return;}
+  if(CFG.platforms.find(p=>p.id===id)){toast('ID already exists',true);return;}
+  CFG.platforms.push({id,name:n,cat,color:col,active:true,isAsset:true,ticker,assetType,where,currentPrice:null,lastFetch:null});
+  saveCFG();closeModal();buildAssetMgr();buildPlatGrid(null);renderAssets();toast(`${n} added ✓`);
+}
+
+
+function platModalHTML(p){
+  // p = existing platform for edit, null for add
+  const isEdit=!!p;
+  const isA=p?.isAsset||false;
+  return `<div class="mh"><div style="font-size:17px;font-weight:800">${isEdit?'Edit':'+'} Platform / Asset</div><button class="mc" onclick="closeModal()">✕</button></div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div class="field"><label>Name</label><input type="text" id="an" placeholder="e.g. IWDA or Emergency Fund" value="${p?.name||''}"></div>
+    <div class="g2">
+      <div class="field"><label>Category</label><select id="ac">${CFG.categories.map(c=>`<option value="${c.id}" ${c.id===(p?.cat||CFG.categories[0]?.id)?'selected':''}>${c.label}</option>`).join('')}</select></div>
+      <div class="field"><label>Colour</label><input type="color" id="acol" value="${p?.color||'#5b6fff'}" style="height:36px;padding:2px 4px"></div>
+    </div>
+    ${!isEdit?`<div class="field"><label>Internal ID (no spaces)</label><input type="text" id="aid" placeholder="e.g. iwda_degiro"></div>`:''}
+    <div style="background:var(--sf2s);border-radius:10px;padding:12px 14px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600">
+        <input type="checkbox" id="aIsAsset" ${isA?'checked':''} onchange="toggleHoldingFields(this.checked)" style="width:16px;height:16px;accent-color:var(--ac)">
+        This is an individual asset (ETF, stock, crypto)
+      </label>
+      <div style="font-size:10px;color:var(--mu2);margin-top:4px;margin-left:24px">Enable to track quantity, buy price and live price quotes</div>
+    </div>
+    <div id="holdingExtraFields" style="display:${isA?'grid':'none'};grid-template-columns:1fr 1fr;gap:10px">
+      <div class="field"><label>Ticker / ISIN</label><input type="text" id="aTicker" placeholder="e.g. VWCE" value="${p?.ticker||''}"></div>
+      <div class="field"><label>Asset Type</label><select id="aType">
+        <option value="etf" ${p?.assetType==='etf'?'selected':''}>ETF / Stock</option>
+        <option value="crypto" ${p?.assetType==='crypto'?'selected':''}>Crypto</option>
+        <option value="other" ${p?.assetType==='other'?'selected':''}>Other</option>
+      </select></div>
+      <div class="field" style="grid-column:1/-1"><label>Where is it held? (note)</label><input type="text" id="aWhere" placeholder="e.g. DEGIRO, Kraken..." value="${p?.where||''}"></div>
+    </div>
+    <button class="btn" onclick="${isEdit?`saveEditPlatNew(${CFG.platforms.indexOf(p)})`:'addPlat()'}" style="margin-top:4px">Save</button>
+  </div>`;
+}
+function toggleHoldingFields(checked){
+  document.getElementById('holdingExtraFields').style.display=checked?'grid':'none';
+}
+function openAddAsset(){
+  openAddPlatform();return;
+  document.getElementById('modalContent').innerHTML=platModalHTML(null);
+  document.getElementById('modalBg').style.display='flex';
+}
+function openEditPlat(i){document.getElementById('modalContent').innerHTML=platModalHTML(CFG.platforms[i]);document.getElementById('modalBg').style.display='flex';}
+function addPlat(){
+  const n=document.getElementById('an')?.value.trim();
+  const cat=document.getElementById('ac')?.value;
+  const col=document.getElementById('acol')?.value;
+  const id=document.getElementById('aid')?.value.trim().replace(/[^a-z0-9_]/gi,'_');
+  const isH=document.getElementById('aIsAsset')?.checked||false;
+  const ticker=document.getElementById('aTicker')?.value.trim()||'';
+  const assetType=document.getElementById('aType')?.value||'etf';
+  const where=document.getElementById('aWhere')?.value.trim()||'';
+  if(!n||!id){toast('Fill in name and ID',true);return;}
+  if(CFG.platforms.find(p=>p.id===id)){toast('ID already exists',true);return;}
+  CFG.platforms.push({id,name:n,cat,color:col,active:true,isHolding:isH,ticker,assetType,where});
+  saveCFG();closeModal();buildManagers();buildPlatGrid(null);renderAssets();toast(`${n} added ✓`);
+}
+function saveEditPlat(i){const n=document.getElementById('aen')?.value.trim(),cat=document.getElementById('aec')?.value,col=document.getElementById('aecol')?.value;if(!n)return;CFG.platforms[i]={...CFG.platforms[i],name:n,cat,color:col};saveCFG();closeModal();buildManagers();buildPlatGrid(null);renderAll();toast('Updated ✓');}
+function saveEditPlatNew(i){
+  const n=document.getElementById('an')?.value.trim();
+  const cat=document.getElementById('ac')?.value;
+  const col=document.getElementById('acol')?.value;
+  const isH=document.getElementById('aIsAsset')?.checked||false;
+  const ticker=document.getElementById('aTicker')?.value.trim()||'';
+  const assetType=document.getElementById('aType')?.value||'etf';
+  const where=document.getElementById('aWhere')?.value.trim()||'';
+  if(!n)return;
+  CFG.platforms[i]={...CFG.platforms[i],name:n,cat,color:col,isHolding:isH,ticker,assetType,where};
+  saveCFG();closeModal();buildManagers();buildPlatGrid(null);renderAll();renderAssets();toast('Updated ✓');
+}
 function togglePlat(i,active){CFG.platforms[i].active=active;saveCFG();buildManagers();buildPlatGrid(null);renderAll();}
 function removePlat(i){if(!confirm(`Remover ${CFG.platforms[i].name}? Não afeta o histórico.`))return;CFG.platforms.splice(i,1);saveCFG();buildManagers();buildPlatGrid(null);renderAll();toast('Removida ✓');}
 function updPlatColor(i,color){CFG.platforms[i].color=color;saveCFG();buildManagers();renderAll();}
@@ -1308,34 +2029,89 @@ function toast(msg,err=false){
   t.style.display='block';setTimeout(()=>t.style.display='none',2600);
 }
 
+
+// ═══════════════════════════════════════════
+// FEEDBACK & CELEBRATIONS
+// ═══════════════════════════════════════════
+
+function getFeedback(){
+  const E=DB.entries;
+  if(!E||E.length<2)return null;
+  const last=E[E.length-1];
+  const prev=E[E.length-2];
+  const first=E[0];
+  const totalInv=E.reduce((s,e)=>s+(e.invested_month||0),0);
+  const gain=last.total-totalInv;
+  const gainPct=totalInv>0?(gain/totalInv)*100:0;
+  const varMes=(last.total/prev.total-1)*100;
+  const savAvg=E.reduce((s,e)=>s+(e.savings||0),0)/E.length;
+  const months=E.length;
+  const msgs=[];
+
+  // Milestones
+  const milestones=[1000,5000,10000,25000,50000,100000,250000,500000];
+  for(const m of milestones){
+    if(last.total>=m&&prev.total<m){
+      msgs.push({icon:'🎉',title:`You crossed ${fEUR(m)}!`,sub:'A major milestone — keep it up.',color:'var(--ac)',priority:10});
+    }
+  }
+  // Positive month
+  if(varMes>5) msgs.push({icon:'🚀',title:`Portfolio up ${fPct(varMes)} this month`,sub:'One of your best months yet.',color:'var(--gn)',priority:8});
+  else if(varMes>0) msgs.push({icon:'📈',title:`+${fPct(varMes)} this month`,sub:`Now at ${fEUR(last.total)}.`,color:'var(--gn)',priority:3});
+  else if(varMes<-5) msgs.push({icon:'📉',title:`Down ${fPct(varMes)} this month`,sub:'Markets dip — stay the course.',color:'var(--am)',priority:4});
+  // Return milestone
+  if(gainPct>=10&&gainPct<20) msgs.push({icon:'💰',title:`${fPct(gainPct)} total return`,sub:`You've made ${fEUR(gain)} on your investments.`,color:'var(--gn)',priority:5});
+  if(gainPct>=20) msgs.push({icon:'🏆',title:`${fPct(gainPct)} total return!`,sub:`${fEUR(gain)} earned on ${fEUR(totalInv)} invested.`,color:'var(--gn)',priority:9});
+  // Consistency
+  if(months===6) msgs.push({icon:'⭐',title:'6 months of tracking!',sub:'Consistency is the secret weapon.',color:'var(--ac)',priority:7});
+  if(months===12) msgs.push({icon:'🎂',title:'1 year of tracking!',sub:'A full year of data — you can see real trends now.',color:'var(--ac)',priority:9});
+  if(months===24) msgs.push({icon:'🏅',title:'2 years of tracking!',sub:'You have serious data now. The compound effect is real.',color:'var(--ac)',priority:9});
+  // Savings rate
+  if(savAvg>=30) msgs.push({icon:'💪',title:`Avg savings rate: ${savAvg.toFixed(0)}%`,sub:'Saving a third of your income — impressive.',color:'var(--am)',priority:6});
+  else if(savAvg>=20) msgs.push({icon:'👍',title:`Avg savings rate: ${savAvg.toFixed(0)}%`,sub:'Above 20% — on a great track.',color:'var(--am)',priority:4});
+  // FIRE progress
+  const fireExp=CFG.fire?.expense||2000;
+  const fireRate=CFG.fire?.rate||4;
+  const fireTarget=fireExp*12/(fireRate/100);
+  const firePct=(last.total/fireTarget)*100;
+  if(firePct>=25&&firePct<50) msgs.push({icon:'🔥',title:`${firePct.toFixed(0)}% to FIRE`,sub:`${fEUR(fireTarget-last.total)} to go.`,color:'var(--gn)',priority:5});
+  if(firePct>=50&&firePct<75) msgs.push({icon:'🔥🔥',title:`Halfway to FIRE!`,sub:`${firePct.toFixed(0)}% of ${fEUR(fireTarget)} reached.`,color:'var(--gn)',priority:8});
+  if(firePct>=75) msgs.push({icon:'🔥🔥🔥',title:`${firePct.toFixed(0)}% to FIRE — almost there!`,sub:`Only ${fEUR(fireTarget-last.total)} to go.`,color:'var(--gn)',priority:9});
+
+  if(!msgs.length)return null;
+  // Return highest priority
+  msgs.sort((a,b)=>b.priority-a.priority);
+  return msgs[0];
+}
+
+function renderFeedback(){
+  const fb=getFeedback();
+  const el=document.getElementById('dash-feedback');
+  if(!el)return;
+  if(!fb){el.style.display='none';return;}
+  el.style.display='block';
+  el.style.borderColor=fb.color;
+  document.getElementById('fb-icon').textContent=fb.icon;
+  document.getElementById('fb-title').textContent=fb.title;
+  document.getElementById('fb-title').style.color=fb.color;
+  document.getElementById('fb-sub').textContent=fb.sub;
+}
+
 // ═══════════════════════════════════════════
 // RENDER ALL
 // ═══════════════════════════════════════════
-function renderAll(){renderDash();renderHistory();}
+function renderAll(){renderDash();renderHistory();renderFeedback();}
 
 // ═══════════════════════════════════════════
 // DEFAULT DATA
 // ═══════════════════════════════════════════
 function getDefaultDB(){return{entries:[
-  {month:"January 2024",date:"2024-01-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:22,invested_month:700,total:12450,platforms:{etoro:2800,etoro_inv:300,degiro:1200,degiro_inv:200,freetrade:600,freetrade_inv:100,btc:980,btc_inv:0,kraken:420,kraken_inv:0,crypto_other:350,crypto_other_inv:0,savings_acc:2100,savings_acc_inv:100,emergency:1500,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:1200,pension_a_inv:100,pension_b:500,pension_b_inv:0,pension_vol:0,pension_vol_inv:0}},
-  {month:"February 2024",date:"2024-02-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:25,invested_month:800,total:13100,platforms:{etoro:3050,etoro_inv:300,degiro:1350,degiro_inv:150,freetrade:650,freetrade_inv:50,btc:1050,btc_inv:0,kraken:460,kraken_inv:0,crypto_other:380,crypto_other_inv:0,savings_acc:2200,savings_acc_inv:100,emergency:1500,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:1310,pension_a_inv:110,pension_b:500,pension_b_inv:0,pension_vol:0,pension_vol_inv:0}},
-  {month:"March 2024",date:"2024-03-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:28,invested_month:900,total:14200,platforms:{etoro:3350,etoro_inv:350,degiro:1500,degiro_inv:150,freetrade:700,freetrade_inv:50,btc:1250,btc_inv:0,kraken:540,kraken_inv:0,crypto_other:410,crypto_other_inv:0,savings_acc:2300,savings_acc_inv:100,emergency:1500,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:1430,pension_a_inv:120,pension_b:500,pension_b_inv:0,pension_vol:420,pension_vol_inv:130}},
-  {month:"April 2024",date:"2024-04-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:21,invested_month:680,total:14650,platforms:{etoro:3500,etoro_inv:200,degiro:1600,degiro_inv:100,freetrade:720,freetrade_inv:50,btc:1180,btc_inv:0,kraken:500,kraken_inv:0,crypto_other:390,crypto_other_inv:0,savings_acc:2400,savings_acc_inv:100,emergency:1500,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:1550,pension_a_inv:120,pension_b:500,pension_b_inv:0,pension_vol:510,pension_vol_inv:90}},
-  {month:"May 2024",date:"2024-05-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:23,invested_month:750,total:15500,platforms:{etoro:3750,etoro_inv:250,degiro:1720,degiro_inv:120,freetrade:760,freetrade_inv:40,btc:1300,btc_inv:0,kraken:560,kraken_inv:0,crypto_other:420,crypto_other_inv:0,savings_acc:2500,savings_acc_inv:100,emergency:1500,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:1670,pension_a_inv:120,pension_b:500,pension_b_inv:0,pension_vol:620,pension_vol_inv:110}},
-  {month:"June 2024",date:"2024-06-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:25,invested_month:800,total:16400,platforms:{etoro:4000,etoro_inv:300,degiro:1850,degiro_inv:130,freetrade:800,freetrade_inv:40,btc:1420,btc_inv:0,kraken:600,kraken_inv:0,crypto_other:450,crypto_other_inv:0,savings_acc:2600,savings_acc_inv:100,emergency:1500,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:1800,pension_a_inv:130,pension_b:500,pension_b_inv:0,pension_vol:730,pension_vol_inv:110}},
-  {month:"July 2024",date:"2024-07-28",salary:5500,income:[{label:'Salary',amount:3200},{label:'Bonus',amount:2300}],savings:42,invested_month:2300,total:18300,platforms:{etoro:4500,etoro_inv:600,degiro:2100,degiro_inv:300,freetrade:860,freetrade_inv:60,btc:1600,btc_inv:0,kraken:680,kraken_inv:0,crypto_other:490,crypto_other_inv:0,savings_acc:2800,savings_acc_inv:200,emergency:2000,emergency_inv:500,bonds:800,bonds_inv:0,pension_a:1950,pension_a_inv:150,pension_b:800,pension_b_inv:300,pension_vol:870,pension_vol_inv:140}},
-  {month:"August 2024",date:"2024-08-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:26,invested_month:840,total:19400,platforms:{etoro:4750,etoro_inv:300,degiro:2250,degiro_inv:150,freetrade:900,freetrade_inv:40,btc:1680,btc_inv:0,kraken:720,kraken_inv:0,crypto_other:510,crypto_other_inv:0,savings_acc:2900,savings_acc_inv:100,emergency:2000,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:2100,pension_a_inv:150,pension_b:900,pension_b_inv:100,pension_vol:1010,pension_vol_inv:140}},
-  {month:"September 2024",date:"2024-09-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:27,invested_month:870,total:20500,platforms:{etoro:5050,etoro_inv:350,degiro:2400,degiro_inv:150,freetrade:950,freetrade_inv:50,btc:1750,btc_inv:0,kraken:760,kraken_inv:0,crypto_other:540,crypto_other_inv:0,savings_acc:3000,savings_acc_inv:100,emergency:2000,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:2250,pension_a_inv:150,pension_b:1000,pension_b_inv:100,pension_vol:1150,pension_vol_inv:140}},
-  {month:"October 2024",date:"2024-10-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:18,invested_month:580,total:21200,platforms:{etoro:5200,etoro_inv:200,degiro:2500,degiro_inv:100,freetrade:980,freetrade_inv:30,btc:1800,btc_inv:0,kraken:780,kraken_inv:0,crypto_other:560,crypto_other_inv:0,savings_acc:3100,savings_acc_inv:100,emergency:2000,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:2400,pension_a_inv:150,pension_b:1000,pension_b_inv:0,pension_vol:1280,pension_vol_inv:130}},
-  {month:"November 2024",date:"2024-11-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:24,invested_month:780,total:22300,platforms:{etoro:5500,etoro_inv:350,degiro:2650,degiro_inv:150,freetrade:1010,freetrade_inv:30,btc:2050,btc_inv:0,kraken:900,kraken_inv:0,crypto_other:640,crypto_other_inv:0,savings_acc:3200,savings_acc_inv:100,emergency:2000,emergency_inv:0,bonds:800,bonds_inv:0,pension_a:2550,pension_a_inv:150,pension_b:1000,pension_b_inv:0,pension_vol:1400,pension_vol_inv:120}},
-  {month:"December 2024",date:"2024-12-28",salary:5800,income:[{label:'Salary',amount:3200},{label:'Year-end bonus',amount:2600}],savings:55,invested_month:3200,total:25200,platforms:{etoro:6100,etoro_inv:700,degiro:3000,degiro_inv:400,freetrade:1050,freetrade_inv:40,btc:2200,btc_inv:0,kraken:960,kraken_inv:0,crypto_other:680,crypto_other_inv:0,savings_acc:3500,savings_acc_inv:300,emergency:2200,emergency_inv:200,bonds:1200,bonds_inv:400,pension_a:2750,pension_a_inv:200,pension_b:1200,pension_b_inv:200,pension_vol:1560,pension_vol_inv:160}},
-  {month:"January 2025",date:"2025-01-30",salary:3400,income:[{label:'Salary',amount:3400}],savings:24,invested_month:810,total:26300,platforms:{etoro:6400,etoro_inv:350,degiro:3150,degiro_inv:150,freetrade:1080,freetrade_inv:30,btc:2300,btc_inv:0,kraken:1010,kraken_inv:0,crypto_other:710,crypto_other_inv:0,savings_acc:3600,savings_acc_inv:100,emergency:2200,emergency_inv:0,bonds:1200,bonds_inv:0,pension_a:2920,pension_a_inv:170,pension_b:1200,pension_b_inv:0,pension_vol:1720,pension_vol_inv:160}},
-  {month:"February 2025",date:"2025-02-28",salary:3400,income:[{label:'Salary',amount:3400}],savings:23,invested_month:780,total:27200,platforms:{etoro:6700,etoro_inv:350,degiro:3300,degiro_inv:150,freetrade:1110,freetrade_inv:30,btc:2380,btc_inv:0,kraken:1050,kraken_inv:0,crypto_other:740,crypto_other_inv:0,savings_acc:3700,savings_acc_inv:100,emergency:2200,emergency_inv:0,bonds:1200,bonds_inv:0,pension_a:3090,pension_a_inv:170,pension_b:1200,pension_b_inv:0,pension_vol:1880,pension_vol_inv:160}},
-  {month:"March 2025",date:"2025-03-28",salary:3400,income:[{label:'Salary',amount:3400}],savings:22,invested_month:750,total:28100,platforms:{etoro:6950,etoro_inv:300,degiro:3450,degiro_inv:150,freetrade:1140,freetrade_inv:30,btc:2440,btc_inv:0,kraken:1090,kraken_inv:0,crypto_other:770,crypto_other_inv:0,savings_acc:3800,savings_acc_inv:100,emergency:2200,emergency_inv:0,bonds:1200,bonds_inv:0,pension_a:3270,pension_a_inv:180,pension_b:1200,pension_b_inv:0,pension_vol:2050,pension_vol_inv:170}},
-  {month:"April 2025",date:"2025-04-28",salary:3400,income:[{label:'Salary',amount:3400}],savings:30,invested_month:1020,total:29300,platforms:{etoro:7250,etoro_inv:350,degiro:3650,degiro_inv:200,freetrade:1180,freetrade_inv:40,btc:2550,btc_inv:0,kraken:1140,kraken_inv:0,crypto_other:800,crypto_other_inv:0,savings_acc:3900,savings_acc_inv:100,emergency:2200,emergency_inv:0,bonds:1200,bonds_inv:0,pension_a:3460,pension_a_inv:190,pension_b:1200,pension_b_inv:0,pension_vol:2270,pension_vol_inv:220}},
-  {month:"August 2025",date:"2025-08-31",salary:3400,income:[{label:'Salary',amount:3400}],savings:25,invested_month:850,total:34500,platforms:{etoro:8600,etoro_inv:400,degiro:4400,degiro_inv:200,freetrade:1350,freetrade_inv:50,btc:3100,btc_inv:0,kraken:1380,kraken_inv:0,crypto_other:970,crypto_other_inv:0,savings_acc:4200,savings_acc_inv:100,emergency:2400,emergency_inv:0,bonds:1500,bonds_inv:0,pension_a:4100,pension_a_inv:200,pension_b:1500,pension_b_inv:0,pension_vol:2900,pension_vol_inv:200}},
-  {month:"December 2025",date:"2025-12-31",salary:6200,income:[{label:'Salary',amount:3400},{label:'Year-end bonus',amount:2800}],savings:60,invested_month:3700,total:40800,platforms:{etoro:10200,etoro_inv:900,degiro:5300,degiro_inv:500,freetrade:1550,freetrade_inv:80,btc:3600,btc_inv:0,kraken:1600,kraken_inv:0,crypto_other:1100,crypto_other_inv:0,savings_acc:5000,savings_acc_inv:500,emergency:2600,emergency_inv:200,bonds:2200,bonds_inv:700,pension_a:4900,pension_a_inv:220,pension_b:1800,pension_b_inv:300,pension_vol:3650,pension_vol_inv:250}},
-  {month:"May 2026",date:"2026-05-28",salary:3600,income:[{label:'Salary',amount:3600}],savings:29,invested_month:1050,total:47200,platforms:{etoro:12100,etoro_inv:500,degiro:6200,degiro_inv:300,freetrade:1800,freetrade_inv:80,btc:4100,btc_inv:0,kraken:1850,kraken_inv:0,crypto_other:1250,crypto_other_inv:0,savings_acc:5800,savings_acc_inv:170,emergency:2800,emergency_inv:0,bonds:2500,bonds_inv:0,pension_a:5800,pension_a_inv:250,pension_b:2100,pension_b_inv:0,pension_vol:4500,pension_vol_inv:250}},
+  {month:"January 2026",date:"2026-01-31",salary:3200,income:[{label:'Salary',amount:3200}],savings:20,invested_month:640,total:10200,platforms:{broker:4800,broker_inv:300,savings:3500,savings_inv:200,vwce:1400,vwce_inv:100,btc:500,btc_inv:40},holdings_pos:{vwce:{qty:15,buyPrice:93.00},btc:{qty:0.008,buyPrice:35000}}},
+  {month:"February 2026",date:"2026-02-28",salary:3200,income:[{label:'Salary',amount:3200}],savings:22,invested_month:700,total:11050,platforms:{broker:5100,broker_inv:300,savings:3700,savings_inv:200,vwce:1680,vwce_inv:140,btc:570,btc_inv:60},holdings_pos:{vwce:{qty:17,buyPrice:93.50},btc:{qty:0.009,buyPrice:35500}}},
+  {month:"March 2026",date:"2026-03-31",salary:3200,income:[{label:'Salary',amount:3200}],savings:24,invested_month:760,total:12100,platforms:{broker:5500,broker_inv:350,savings:3900,savings_inv:200,vwce:2050,vwce_inv:200,btc:650,btc_inv:10},holdings_pos:{vwce:{qty:19,buyPrice:94.20},btc:{qty:0.010,buyPrice:36000}}},
+  {month:"April 2026",date:"2026-04-30",salary:3200,income:[{label:'Salary',amount:3200}],savings:21,invested_month:670,total:12800,platforms:{broker:5750,broker_inv:250,savings:4100,savings_inv:200,vwce:2300,vwce_inv:180,btc:650,btc_inv:40},holdings_pos:{vwce:{qty:21,buyPrice:94.80},btc:{qty:0.010,buyPrice:36000}}},
+  {month:"May 2026",date:"2026-05-31",salary:3200,income:[{label:'Salary',amount:3200}],savings:23,invested_month:730,total:13600,platforms:{broker:6000,broker_inv:250,savings:4300,savings_inv:200,vwce:2600,vwce_inv:220,btc:700,btc_inv:60},holdings_pos:{vwce:{qty:23,buyPrice:95.10},btc:{qty:0.011,buyPrice:36200}}},
+  {month:"June 2026",date:"2026-06-10",salary:3200,income:[{label:'Salary',amount:3200}],savings:25,invested_month:800,total:14500,platforms:{broker:6300,broker_inv:300,savings:4500,savings_inv:200,vwce:2950,vwce_inv:260,btc:750,btc_inv:40},holdings_pos:{vwce:{qty:25,buyPrice:95.50},btc:{qty:0.012,buyPrice:36500}}},
 ]};}
 
 // ═══════════════════════════════════════════
@@ -1344,11 +2120,902 @@ function getDefaultDB(){return{entries:[
 window.addEventListener('DOMContentLoaded',()=>{
   loadAll();initCharts();buildPlatGrid(null);buildIncomeRows(null);
   renderAll();buildPlatList();
-  updateStatus();applyTheme();
+  updateStatus();applyTheme();applyLang();
+  checkOnboarding();
+  // Sync lang seg
+  document.querySelectorAll('#langSeg .segb').forEach(b=>{
+    if((b.textContent.includes('EN')&&OPTS.lang==='en')||(b.textContent.includes('PT')&&OPTS.lang==='pt'))b.classList.add('on');
+    else b.classList.remove('on');
+  });
   const fd=document.getElementById('f-date');if(fd)fd.value=new Date().toISOString().slice(0,10);
   const last2=DB.entries.length?DB.entries[DB.entries.length-1]:null;
-  const eh=document.getElementById('entryHint');if(eh&&last2)eh.textContent=`Último: ${last2.month} — ${fEUR(last2.total)}`;
+  const eh=document.getElementById('entryHint');if(eh&&last2)eh.textContent=`Last: ${last2.month} — ${fEUR(last2.total)}`;
 });
+
+// ═══════════════════════════════════════════
+// HOLDINGS
+// ═══════════════════════════════════════════
+
+// Holdings are platforms with isAsset:true — no separate array needed
+
+function ASSETS(){return CFG.platforms.filter(p=>p.isAsset===true&&p.active!==false);}
+
+async function fetchCryptoPrice(ticker){
+  try{
+    const res=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(ticker.toLowerCase())}&vs_currencies=eur`);
+    if(!res.ok)return null;
+    const d=await res.json();
+    return d[ticker.toLowerCase()]?.eur||null;
+  }catch(e){return null;}
+}
+
+async function fetchETFPrice(ticker){
+  // 1. Try Yahoo Finance v8 direct (works in browser, no proxy needed)
+  const yUrls=[
+    `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`,
+    `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`,
+  ];
+  for(const url of yUrls){
+    try{
+      const res=await fetch(url,{headers:{'Accept':'application/json'}});
+      if(!res.ok)continue;
+      const d=await res.json();
+      const price=d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(price&&price>0)return price;
+    }catch(e){continue;}
+  }
+  // 2. Try Yahoo Finance v7 quotes endpoint
+  try{
+    const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(ticker)}`;
+    const res=await fetch(url,{headers:{'Accept':'application/json'}});
+    if(res.ok){
+      const d=await res.json();
+      const price=d?.quoteResponse?.result?.[0]?.regularMarketPrice;
+      if(price&&price>0)return price;
+    }
+  }catch(e){}
+  // 3. Stooq fallback
+  try{
+    const res=await fetch(`https://stooq.com/q/l/?s=${encodeURIComponent(ticker.toLowerCase())}&f=sd2t2ohlcv&h&e=json`);
+    if(res.ok){
+      const d=await res.json();
+      const price=d?.symbols?.[0]?.close||d?.symbols?.[0]?.open||null;
+      if(price&&price>0)return price;
+    }
+  }catch(e){}
+  return null;
+}
+
+async function refreshAllPrices(){
+  const btns=document.querySelectorAll('[onclick="refreshAllPrices()"]');
+  btns.forEach(b=>{b.textContent='↻ Fetching...';b.disabled=true;});
+
+  const holdings=ASSETS();
+  // Only those with qty in the last entry
+  const lastEntry=DB.entries.length?DB.entries[DB.entries.length-1]:null;
+  const active=holdings.filter(p=>{
+    const pos=lastEntry?.holdings_pos?.[p.id];
+    return pos&&pos.qty>0&&p.ticker;
+  });
+
+  if(!active.length){
+    btns.forEach(b=>{b.textContent='↻ Refresh Prices';b.disabled=false;});
+    toast(t('hold_empty').replace(/<[^>]*>/g,''),true);return;
+  }
+
+  // Fetch crypto batch
+  const cryptos=active.filter(p=>p.assetType==='crypto');
+  const etfs=active.filter(p=>p.assetType==='etf');
+  if(cryptos.length){
+    const ids=cryptos.map(p=>p.ticker.toLowerCase()).join(',');
+    try{
+      const res=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(ids)}&vs_currencies=eur`);
+      if(res.ok){const d=await res.json();cryptos.forEach(p=>{const pr=d[p.ticker.toLowerCase()]?.eur;if(pr){p.currentPrice=pr;p.lastFetch=Date.now();}});}
+    }catch(e){}
+  }
+  for(const p of etfs){
+    const pr=await fetchETFPrice(p.ticker);
+    if(pr){p.currentPrice=pr;p.lastFetch=Date.now();}
+  }
+
+  btns.forEach(b=>{b.textContent='↻ Refresh Prices';b.disabled=false;});
+
+  // Build preview modal
+  const today=new Date();
+  const monthStr=today.toLocaleString('en',{month:'long'})+' '+today.getFullYear();
+  const dateStr=today.toISOString().slice(0,10);
+
+  // Start from last entry platforms as base
+  const basePlatforms=lastEntry?{...lastEntry.platforms}:{};
+  const basePos=lastEntry?{...lastEntry.holdings_pos}:{};
+  let holdingTotal=0;
+  const rows=active.map(p=>{
+    const pos=basePos[p.id]||{};
+    const qty=pos.qty||0;
+    const buyPrice=pos.buyPrice||0;
+    const curPrice=p.currentPrice;
+    const newVal=curPrice?Math.round(qty*curPrice):null;
+    if(newVal!=null) holdingTotal+=newVal;
+    const oldVal=basePlatforms[p.id]||0;
+    const diff=newVal!=null?(newVal-oldVal):null;
+    const diffStr=diff!=null?(diff>=0?`<span class="pos">+${fEUR(diff)}</span>`:`<span class="neg">${fEUR(diff)}</span>`):'—';
+    return {p,qty,buyPrice,curPrice,newVal,oldVal,diff,diffStr};
+  });
+
+  // Non-holding platforms keep last value
+  let nonHoldingTotal=0;
+  CFG.platforms.filter(p=>!p.isAsset&&p.active!==false).forEach(p=>{
+    nonHoldingTotal+=(basePlatforms[p.id]||0);
+  });
+  const newTotal=holdingTotal+nonHoldingTotal;
+  const oldTotal=lastEntry?.total||0;
+  const totalDiff=newTotal-oldTotal;
+
+  const rowsHTML=rows.map(r=>`
+    <tr>
+      <td><strong>${r.p.name}</strong>${r.p.ticker?`<br><span style="font-family:var(--mo);font-size:9px;color:var(--mu2)">${r.p.ticker}</span>`:''}<br><span style="font-size:9px;color:var(--mu2)">${r.qty} units</span></td>
+      <td class="mono" style="color:var(--mu2)">${fEUR(r.buyPrice)}</td>
+      <td class="mono" style="color:var(--mu2)">${r.oldVal?fEUR(r.oldVal/r.qty):'—'}</td>
+      <td class="mono">${r.curPrice?`<strong>${fEUR(r.curPrice)}</strong>`:`<span style="color:var(--am)">${t('no_price')}</span>`}</td>
+      <td class="mono">${r.newVal!=null?fEUR(r.newVal):'—'}</td>
+      <td>${r.diffStr}</td>
+    </tr>`).join('');
+
+  const anyFailed=rows.some(r=>r.newVal==null);
+
+  document.getElementById('modalContent').innerHTML=`
+    <div class="mh">
+      <div style="font-size:17px;font-weight:800">${t('snap_title')}</div>
+      <button class="mc" onclick="closeModal()">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--mu2);margin-bottom:14px">${t('snap_sub')} <strong style="color:var(--tx)">${monthStr}</strong> ${t('snap_sub2')}</div>
+    ${anyFailed?`<div style="background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.3);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--am);margin-bottom:12px">⚠ Some prices could not be fetched. Those assets will keep their last recorded value.</div>`:''}
+    <div class="tcard mb" style="overflow-x:auto">
+      <table style="min-width:0;width:100%">
+        <thead><tr><th>Asset</th><th>Buy Price</th><th>Last Price</th><th>New Price</th><th>New Value</th><th>Change</th></tr></thead>
+        <tbody>${rowsHTML}</tbody>
+      </table>
+    </div>
+    <div style="background:var(--sf2s);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">${t('snap_new_total')}</div>
+        <div style="font-family:var(--mo);font-size:22px;font-weight:500">${fEUR(newTotal)}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:9px;color:var(--mu2);margin-bottom:4px">${t('snap_vs')}</div>
+        <div style="font-family:var(--mo);font-size:16px" class="${totalDiff>=0?'pos':'neg'}">${totalDiff>=0?'+':''}${fEUR(totalDiff)}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-ghost" onclick="closeModal()">${t('snap_cancel')}</button>
+      <button class="btn" onclick="confirmPriceEntry()">${t('snap_save')}</button>
+    </div>`;
+  // Store for confirmPriceEntry
+  window._snapshotData={date:dateStr,month:monthStr,updates:rows.map(r=>({id:r.p.id,newVal:r.newVal,qty:r.qty,buyPrice:r.buyPrice})),newTotal};
+  document.getElementById('modalBg').style.display='flex';
+  renderAssets();
+}
+
+function confirmPriceEntry(){
+  const {date,month,updates,newTotal}=window._snapshotData||{};
+  if(!date||!month){toast('Snapshot data lost, please refresh again',true);return;}
+  const lastEntry=DB.entries.length?DB.entries[DB.entries.length-1]:null;
+  const basePlatforms=lastEntry?{...lastEntry.platforms}:{};
+  const basePos=lastEntry?{...lastEntry.holdings_pos}:{};
+  const platforms={...basePlatforms};
+  const holdings_pos={...basePos};
+  updates.forEach(u=>{
+    if(u.newVal!=null) platforms[u.id]=u.newVal;
+    holdings_pos[u.id]={qty:u.qty,buyPrice:u.buyPrice};
+  });
+  // Recalc total
+  let total=0;
+  CFG.platforms.filter(p=>p.active!==false).forEach(p=>{total+=platforms[p.id]||0;});
+  const entry={
+    month,date,
+    salary:lastEntry?.salary||0,
+    income:lastEntry?.income||[],
+    savings:lastEntry?.savings||0,
+    platforms,holdings_pos,
+    invested_month:0,
+    total:Math.round(total||newTotal),
+    note:'📸 Price snapshot (auto)'
+  };
+  const idx=DB.entries.findIndex(e=>e.month===month);
+  if(idx>=0){DB.entries[idx]=entry;toast(`${month} ${t('updated')}`);}
+  else{DB.entries.push(entry);DB.entries.sort((a,b)=>a.date.localeCompare(b.date));toast(`${t('snap_title')}: ${month} ✓`);}
+  closeModal();renderAll();renderAssets();
+}
+
+// Track open accordion rows
+const _openAssets = new Set();
+// Track accordion charts
+const _assetCharts = {};
+
+function renderAssetsOverview(){
+  const assets=ASSETS();
+  const wrap=document.getElementById('assets-overview-wrap');
+  if(!wrap)return;
+  if(!assets.length||DB.entries.length<2){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  const labels=DB.entries.map(e=>e.month.split(' ')[0].slice(0,3)+' '+e.month.split(' ')[1]?.slice(2));
+  const datasets=assets.map(p=>({
+    label:p.name,
+    data:DB.entries.map(e=>e.platforms?.[p.id]||null),
+    borderColor:p.color,backgroundColor:p.color+'22',
+    fill:false,tension:.4,pointRadius:3,pointBackgroundColor:p.color,borderWidth:2,spanGaps:true
+  }));
+  const canvas=document.getElementById('cAssetsOverview');
+  if(!canvas)return;
+  if(cAssetsOverview)cAssetsOverview.destroy();
+  cAssetsOverview=new Chart(canvas,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{x:{ticks:{font:{size:9},color:'#7a87a8'},grid:{display:false}},
+            y:{ticks:{font:{size:9},color:'#7a87a8',callback:v=>'€'+v.toLocaleString()},grid:{color:'rgba(255,255,255,.04)'}}}}});
+  // Custom legend
+  const legend=document.getElementById('assets-chart-legend');
+  if(legend) legend.innerHTML=assets.map(p=>`<div style="display:flex;align-items:center;gap:4px;font-size:10px"><span style="width:8px;height:8px;border-radius:50%;background:${p.color};display:inline-block"></span>${p.name}</div>`).join('');
+}
+
+function renderAssets(){
+  renderAssetsOverview();
+  const tbody=document.getElementById('holdingsTbody');
+  const empty=document.getElementById('holdingsEmpty');
+  if(!tbody)return;
+  const assets=ASSETS();
+  if(!assets.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  const lastEntry=DB.entries.length?DB.entries[DB.entries.length-1]:null;
+
+  let html='';
+  assets.forEach(p=>{
+    const pos=lastEntry?.holdings_pos?.[p.id]||{};
+    const qty=pos.qty||0;
+    const buyPrice=pos.buyPrice||0;
+    const cost=qty*buyPrice;
+    const val=p.currentPrice&&qty?(qty*p.currentPrice):null;
+    const pl=val!=null?(val-cost):null;
+    const plPct=pl!=null&&cost>0?((pl/cost)*100):null;
+    const plClass=pl==null?'':(pl>=0?'pos':'neg');
+    const plStr=pl==null?'<span style="color:var(--mu2)">—</span>':`<span class="${plClass}">${pl>=0?'+':''}${fEUR(pl)} <small style="font-size:9px">(${plPct>=0?'+':''}${plPct.toFixed(1)}%)</small></span>`;
+    const curStr=p.currentPrice?`${fEUR(p.currentPrice)}<br><span style="font-size:9px;color:var(--mu2)">${p.lastFetch?new Date(p.lastFetch).toLocaleTimeString():'—'}</span>`:'<span style="color:var(--mu2)">—</span>';
+    const typeBadge={etf:'ETF',crypto:'Crypto',other:'Manual'}[p.assetType]||'—';
+    const isOpen=_openAssets.has(p.id);
+
+    // Main row
+    html+=`<tr class="asset-row${isOpen?' open':''}" onclick="toggleAssetAccordion('${p.id}')" style="cursor:pointer">
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="asset-expand-hint" id="arow-icon-${p.id}">›</span>
+          <div>
+            <strong>${p.name}</strong>
+            ${p.ticker?`<br><span style="font-family:var(--mo);font-size:10px;color:var(--mu2)">${p.ticker}</span>`:''}
+          </div>
+        </div>
+      </td>
+      <td style="font-size:11px;color:var(--mu2)">${p.where||'—'}</td>
+      <td><span class="badge" style="background:var(--sf2s);color:var(--mu2)">${typeBadge}</span></td>
+      <td class="mono">${qty||'—'}</td>
+      <td class="mono">${buyPrice?fEUR(buyPrice):'—'}</td>
+      <td class="mono">${curStr}</td>
+      <td class="mono">${cost?fEUR(cost):'—'}</td>
+      <td class="mono">${val!=null?fEUR(val):'—'}</td>
+      <td>${plStr}</td>
+    </tr>`;
+
+    // Accordion row
+    html+=`<tr id="arow-expand-${p.id}" style="display:${isOpen?'table-row':'none'}">
+      <td colspan="9" style="padding:0;background:var(--sf2s)">
+        <div class="arow-expand-inner" style="padding:16px 20px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px" id="arow-kpis-${p.id}"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:8px">Price History</div>
+              <div style="position:relative;height:140px"><canvas id="achart-price-${p.id}"></canvas></div>
+            </div>
+            <div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:8px">Portfolio Value</div>
+              <div style="position:relative;height:140px"><canvas id="achart-val-${p.id}"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  });
+  tbody.innerHTML=html;
+  // Re-init open accordions
+  _openAssets.forEach(id=>buildAssetAccordion(id));
+}
+
+function toggleAssetAccordion(id){
+  const row=document.getElementById('arow-expand-'+id);
+  if(!row)return;
+  const isOpen=_openAssets.has(id);
+  const icon=document.getElementById('arow-icon-'+id);
+  if(isOpen){
+    _openAssets.delete(id);
+    row.style.display='none';
+    const mainRows=document.querySelectorAll('.asset-row');
+    mainRows.forEach(r=>{if(r.querySelector(`#arow-icon-${id}`))r.classList.remove('open');});
+    // Destroy charts
+    if(_assetCharts[id+'_price']){_assetCharts[id+'_price'].destroy();delete _assetCharts[id+'_price'];}
+    if(_assetCharts[id+'_val']){_assetCharts[id+'_val'].destroy();delete _assetCharts[id+'_val'];}
+  } else {
+    _openAssets.add(id);
+    row.style.display='table-row';
+    if(icon)icon.classList.add('open')||icon.parentElement?.parentElement?.parentElement?.classList.add('open');
+    // Add open class to main row
+    const mainRows=document.querySelectorAll('.asset-row');
+    mainRows.forEach(r=>{if(r.querySelector(`#arow-icon-${id}`))r.classList.add('open');});
+    buildAssetAccordion(id);
+  }
+}
+
+function buildAssetAccordion(id){
+  const p=CFG.platforms.find(x=>x.id===id);
+  if(!p)return;
+
+  // Collect history from entries
+  const history=DB.entries.map(e=>{
+    const pos=e.holdings_pos?.[id];
+    const val=e.platforms?.[id]||0;
+    // Implied price = value / qty if we have qty
+    const impliedPrice=pos&&pos.qty>0?(val/pos.qty):null;
+    return {month:e.month,date:e.date,val,qty:pos?.qty||0,buyPrice:pos?.buyPrice||0,impliedPrice};
+  }).filter(e=>e.val>0||e.qty>0);
+
+  // KPIs
+  const lastPos=history.length?history[history.length-1]:null;
+  const firstPos=history.length?history[0]:null;
+  const qty=lastPos?.qty||0;
+  const buyPrice=lastPos?.buyPrice||0;
+  const cost=qty*buyPrice;
+  const curPrice=p.currentPrice||lastPos?.impliedPrice||0;
+  const curVal=qty*curPrice;
+  const pl=curVal-cost;
+  const plPct=cost>0?(pl/cost*100):0;
+  const kpiDiv=document.getElementById('arow-kpis-'+id);
+  if(kpiDiv) kpiDiv.innerHTML=`
+    <div style="background:var(--sf);border-radius:9px;padding:10px 12px">
+      <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">Position</div>
+      <div style="font-family:var(--mo);font-size:15px;font-weight:500">${qty} units</div>
+      <div style="font-size:10px;color:var(--mu2)">@ ${fEUR(buyPrice)} avg</div>
+    </div>
+    <div style="background:var(--sf);border-radius:9px;padding:10px 12px">
+      <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">Total Cost</div>
+      <div style="font-family:var(--mo);font-size:15px;font-weight:500">${fEUR(cost)}</div>
+      <div style="font-size:10px;color:var(--mu2)">${history.length} entries</div>
+    </div>
+    <div style="background:var(--sf);border-radius:9px;padding:10px 12px">
+      <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">P&L</div>
+      <div style="font-family:var(--mo);font-size:15px;font-weight:500;color:${pl>=0?'var(--gn)':'var(--rd)'}">${pl>=0?'+':''}${fEUR(pl)}</div>
+      <div style="font-size:10px;color:${pl>=0?'var(--gn)':'var(--rd)'}">${plPct>=0?'+':''}${plPct.toFixed(1)}%</div>
+    </div>`;
+
+  const labels=history.map(e=>e.month.split(' ')[0].slice(0,3)+' '+e.month.split(' ')[1]?.slice(2));
+  const color=p.color||'var(--ac)';
+
+  // Price history chart
+  const priceCanvas=document.getElementById('achart-price-'+id);
+  if(priceCanvas){
+    if(_assetCharts[id+'_price']) _assetCharts[id+'_price'].destroy();
+    const prices=history.map(e=>e.impliedPrice?parseFloat(e.impliedPrice.toFixed(2)):null);
+    _assetCharts[id+'_price']=new Chart(priceCanvas,{type:'line',data:{labels,datasets:[{
+      label:'Price',data:prices,borderColor:color,backgroundColor:color+'22',
+      fill:true,tension:.4,pointRadius:3,pointBackgroundColor:color,borderWidth:2,spanGaps:true
+    }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:9},color:'#7a87a8'},grid:{display:false}},
+              y:{ticks:{font:{size:9},color:'#7a87a8',callback:v=>'€'+v},grid:{color:'rgba(255,255,255,.04)'}}}}});
+  }
+
+  // Portfolio value chart
+  const valCanvas=document.getElementById('achart-val-'+id);
+  if(valCanvas){
+    if(_assetCharts[id+'_val']) _assetCharts[id+'_val'].destroy();
+    const vals=history.map(e=>e.val);
+    _assetCharts[id+'_val']=new Chart(valCanvas,{type:'bar',data:{labels,datasets:[{
+      label:'Value',data:vals,backgroundColor:color+'99',borderRadius:4,borderSkipped:false
+    }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:9},color:'#7a87a8'},grid:{display:false}},
+              y:{ticks:{font:{size:9},color:'#7a87a8',callback:v=>'€'+v},grid:{color:'rgba(255,255,255,.04)'}}}}});
+  }
+}
+
+
+
+// ═══════════════════════════════════════════
+// CSV IMPORT
+// ═══════════════════════════════════════════
+
+// Fields the app can import — label, key, required, description
+const CSV_FIELDS = [
+  {key:'month',    label:'Month',          required:true,  desc:'e.g. "January 2024"'},
+  {key:'date',     label:'Date',           required:true,  desc:'e.g. "2024-01-28" (YYYY-MM-DD)'},
+  {key:'total',    label:'Portfolio Total',required:true,  desc:'Total value of portfolio that month'},
+  {key:'invested_month', label:'Invested This Month', required:false, desc:'Amount invested this month'},
+  {key:'salary',   label:'Income',         required:false, desc:'Total monthly income'},
+  {key:'savings',  label:'Savings %',      required:false, desc:'Savings rate (0-100)'},
+  {key:'note',     label:'Note',           required:false, desc:'Optional month note'},
+];
+
+// Holdings fields — one set per holding platform
+function getHoldingCSVFields(){
+  return ASSETS().map(p=>([
+    {key:`h_qty_${p.id}`,      label:`${p.name} — Qty`,       required:false, desc:`Units of ${p.name}`},
+    {key:`h_buy_${p.id}`,      label:`${p.name} — Avg Buy €`, required:false, desc:`Avg buy price for ${p.name}`},
+    {key:`h_val_${p.id}`,      label:`${p.name} — Value €`,   required:false, desc:`Total value of ${p.name}`},
+  ])).flat();
+}
+
+// Platform fields
+function getPlatCSVFields(){
+  return PLATS().filter(p=>!p.isAsset).map(p=>([
+    {key:`p_val_${p.id}`,  label:`${p.name} — Value €`,    required:false, desc:`Value in ${p.name}`},
+    {key:`p_inv_${p.id}`,  label:`${p.name} — Invested €`, required:false, desc:`Monthly contribution to ${p.name}`},
+  ])).flat();
+}
+
+let _csvData = null; // {headers, rows}
+
+function onCSVUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const text = ev.target.result;
+    const rows = text.trim().split('\n').map(r=>r.replace(/\r$/,'').split(',').map(cel=>cel.trim().replace(/^"|"$/g,'')));
+    if(rows.length < 2){toast('CSV must have at least a header row and one data row',true);return;}
+    const headers = rows[0];
+    const dataRows = rows.slice(1).filter(r=>r.some(c=>c));
+    _csvData = {headers, rows: dataRows};
+    openCSVMappingModal();
+  };
+  reader.readAsText(file);
+  // Reset input so same file can be re-uploaded
+  e.target.value='';
+}
+
+function openCSVMappingModal(){
+  if(!_csvData) return;
+  const {headers} = _csvData;
+  const allFields = [...CSV_FIELDS, ...getHoldingCSVFields(), ...getPlatCSVFields()];
+  const colOptions = `<option value="">— skip —</option>` + headers.map(h=>`<option value="${h}">${h}</option>`).join('');
+
+  // Try to auto-match by similarity
+  function autoMatch(fieldKey, fieldLabel){
+    const fl = fieldLabel.toLowerCase();
+    for(const h of headers){
+      const hl = h.toLowerCase();
+      if(hl===fl || hl===fieldKey.toLowerCase() || hl.includes(fl) || fl.includes(hl)) return h;
+    }
+    return '';
+  }
+
+  const fieldsHTML = allFields.map(f=>{
+    const auto = autoMatch(f.key, f.label);
+    const opts = headers.map(h=>`<option value="${h}" ${h===auto?'selected':''}>${h}</option>`).join('');
+    return `<tr>
+      <td style="padding:6px 8px">
+        <div style="font-size:12px;font-weight:600">${f.label}${f.required?'<span style="color:var(--rd)"> *</span>':''}</div>
+        <div style="font-size:10px;color:var(--mu2)">${f.desc}</div>
+      </td>
+      <td style="padding:6px 8px">
+        <select id="csv_map_${f.key}" style="width:100%;background:var(--sf2s);border:1px solid var(--bd2);border-radius:7px;padding:6px 8px;font-size:12px;color:var(--tx)">
+          <option value="">— skip —</option>
+          ${opts}
+        </select>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Preview first 3 rows
+  const previewRows = _csvData.rows.slice(0,3).map(r=>`<tr>${r.map(c=>`<td style="padding:4px 8px;font-size:11px;font-family:var(--mo);white-space:nowrap">${c}</td>`).join('')}</tr>`).join('');
+  const previewHead = headers.map(h=>`<th style="padding:4px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu)">${h}</th>`).join('');
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="mh">
+      <div style="font-size:17px;font-weight:800">⬆ Import CSV</div>
+      <button class="mc" onclick="closeModal()">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--mu2);margin-bottom:14px">
+      Match your CSV columns to the app fields. Fields marked <span style="color:var(--rd)">*</span> are required.
+      <strong style="color:var(--tx)">${_csvData.rows.length} rows</strong> detected.
+    </div>
+
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:6px">Preview (first 3 rows)</div>
+    <div style="overflow-x:auto;margin-bottom:16px;border-radius:8px;border:1px solid var(--bd)">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--sf2s)">${previewHead}</tr></thead>
+        <tbody>${previewRows}</tbody>
+      </table>
+    </div>
+
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:6px">Column Mapping</div>
+    <div style="overflow-y:auto;max-height:320px;border-radius:8px;border:1px solid var(--bd)">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--sf2s)">
+          <th style="padding:8px;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);text-align:left">App Field</th>
+          <th style="padding:8px;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);text-align:left">Your CSV Column</th>
+        </tr></thead>
+        <tbody>${fieldsHTML}</tbody>
+      </table>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="confirmCSVImport()">⬆ Import ${_csvData.rows.length} rows</button>
+    </div>`;
+  document.getElementById('modalBg').style.display='flex';
+}
+
+function confirmCSVImport(){
+  if(!_csvData) return;
+  const {headers, rows} = _csvData;
+  const allFields = [...CSV_FIELDS, ...getHoldingCSVFields(), ...getPlatCSVFields()];
+
+  // Build mapping: fieldKey → csvColumnIndex
+  const mapping = {};
+  allFields.forEach(f=>{
+    const sel = document.getElementById(`csv_map_${f.key}`);
+    if(sel && sel.value) mapping[f.key] = headers.indexOf(sel.value);
+  });
+
+  // Validate required fields
+  for(const f of CSV_FIELDS.filter(f=>f.required)){
+    if(mapping[f.key]===undefined){toast(`Required field "${f.label}" is not mapped`,true);return;}
+  }
+
+  const getVal = (row, key) => mapping[key]!==undefined ? (row[mapping[key]]||'').trim() : '';
+
+  let imported=0, skipped=0;
+  rows.forEach(row=>{
+    const month = getVal(row,'month');
+    const date  = getVal(row,'date');
+    const total = parseFloat(getVal(row,'total'));
+    if(!month || !date || isNaN(total)){skipped++;return;}
+
+    const platforms = {};
+    PLATS().forEach(p=>{
+      if(!p.isAsset){
+        const val = parseFloat(getVal(row,`p_val_${p.id}`))||0;
+        const inv = parseFloat(getVal(row,`p_inv_${p.id}`))||0;
+        platforms[p.id]=val; platforms[p.id+'_inv']=inv;
+      }
+    });
+
+    const holdings_pos = {};
+    ASSETS().forEach(p=>{
+      const qty      = parseFloat(getVal(row,`h_qty_${p.id}`))||0;
+      const buyPrice = parseFloat(getVal(row,`h_buy_${p.id}`))||0;
+      const val      = parseFloat(getVal(row,`h_val_${p.id}`))||0;
+      if(qty||buyPrice||val){
+        holdings_pos[p.id]={qty,buyPrice};
+        platforms[p.id]=val||Math.round(qty*buyPrice);
+        platforms[p.id+'_inv']=0;
+      }
+    });
+
+    const salary   = parseFloat(getVal(row,'salary'))||0;
+    const savings  = parseFloat(getVal(row,'savings'))||0;
+    const invested = parseFloat(getVal(row,'invested_month'))||0;
+    const note     = getVal(row,'note')||'';
+
+    const entry = {
+      month, date, salary,
+      income: salary?[{label:'Income',amount:salary}]:[],
+      savings, platforms, holdings_pos,
+      invested_month: Math.round(invested),
+      total: Math.round(total),
+      note
+    };
+
+    const idx = DB.entries.findIndex(e=>e.month===month);
+    if(idx>=0) DB.entries[idx]=entry;
+    else DB.entries.push(entry);
+    imported++;
+  });
+
+  DB.entries.sort((a,b)=>a.date.localeCompare(b.date));
+  saveDB(); renderAll(); closeModal();
+  toast(`Imported ${imported} entries${skipped?`, skipped ${skipped}`:''} ✓`);
+}
+
+
+
+function switchFutureTab(tab){
+  document.getElementById('ftab-content-proj').style.display = tab==='proj'?'block':'none';
+  document.getElementById('ftab-content-goals').style.display = tab==='goals'?'block':'none';
+  // Card style active state
+  const proj=document.getElementById('ftab-proj');
+  const goals=document.getElementById('ftab-goals');
+  if(proj){proj.style.borderColor=tab==='proj'?'var(--ac)':'var(--bd)';proj.style.background=tab==='proj'?'var(--sf)':'var(--sf)';}
+  if(goals){goals.style.borderColor=tab==='goals'?'var(--ac)':'var(--bd)';goals.style.background=tab==='goals'?'var(--sf)':'var(--sf)';}
+  document.getElementById('future-goal-btn').style.display = tab==='goals'?'block':'none';
+  // Update goals count badge
+  const cnt=document.getElementById('ftab-goals-count');
+  if(cnt) cnt.textContent=CFG.goals.length?`${CFG.goals.length} goal${CFG.goals.length!==1?'s':''}` :'';
+  if(tab==='goals') renderGoals();
+  if(tab==='proj'){
+    if(!cFuturo){cFuturo=mkC('cFuturo','line',{labels:[],datasets:[]},lineOpts(null,true));}
+    renderFuturo();
+  }
+}
+
+
+
+// ═══════════════════════════════════════════
+// ENTRY STEPS
+// ═══════════════════════════════════════════
+let currentEntryStep = 1;
+
+function entryGoStep(step){
+  currentEntryStep = step;
+  [1,2,3].forEach(s=>{
+    const el=document.getElementById('entry-step-'+s);
+    if(el) el.style.display = s===step?'block':'none';
+  });
+  // Update dots
+  [0,1,2].forEach(i=>{
+    const dot=document.getElementById('estep-'+i);
+    if(!dot)return;
+    dot.classList.remove('on','done');
+    if(i+1<step){dot.classList.add('done');dot.textContent='✓';}
+    else if(i+1===step){dot.classList.add('on');dot.textContent=step;}
+    else{dot.textContent=i+1;}
+  });
+  // Progress bars
+  const bar=document.getElementById('estep-bar');
+  const bar2=document.getElementById('estep-bar2');
+  if(bar) bar.style.width = step>1?'100%':'0%';
+  if(bar2) bar2.style.width = step>2?'100%':'0%';
+  // If step 3, build summary
+  if(step===3) buildEntrySummary();
+  // Scroll to top of page
+  document.querySelector('.main')?.scrollTo({top:0,behavior:'smooth'});
+}
+
+function entryNextStep(from){
+  if(from===1){
+    const month=document.getElementById('f-month')?.value.trim();
+    const date=document.getElementById('f-date')?.value;
+    if(!month||!date){toast('Please fill in month and date',true);return;}
+    entryGoStep(2);
+  } else if(from===2){
+    entryGoStep(3);
+  }
+}
+
+function buildEntrySummary(){
+  const month=document.getElementById('f-month')?.value.trim()||'—';
+  const date=document.getElementById('f-date')?.value||'—';
+  const note=document.getElementById('f-note')?.value.trim()||'';
+  const income=incomeData.filter(r=>r.amount>0);
+  const totalInc=income.reduce((s,r)=>s+(r.amount||0),0);
+  let platTotal=0,inv=0;
+  PLATS().forEach(p=>{
+    const tot=parseFloat(document.getElementById('pi_tot_'+p.id)?.value)||0;
+    const i=parseFloat(document.getElementById('pi_inv_'+p.id)?.value)||0;
+    platTotal+=tot;inv+=i;
+  });
+  const savings=totalInc>0?Math.round((inv/totalInc)*100):0;
+  const last=DB.entries.length?DB.entries[DB.entries.length-1]:null;
+  const change=last?(platTotal-last.total):0;
+  const changePct=last&&last.total>0?(change/last.total*100):0;
+
+  const incRows=income.map(r=>`
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd)">
+      <span style="font-size:12px;color:var(--mu2)">${r.label}</span>
+      <span class="mono" style="font-size:12px">${fEUR(r.amount)}</span>
+    </div>`).join('');
+
+  const platRows=PLATS().filter(p=>{
+    const v=parseFloat(document.getElementById('pi_tot_'+p.id)?.value)||0;
+    return v>0;
+  }).map(p=>{
+    const v=parseFloat(document.getElementById('pi_tot_'+p.id)?.value)||0;
+    const i=parseFloat(document.getElementById('pi_inv_'+p.id)?.value)||0;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)">
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="dot" style="background:${p.color};width:8px;height:8px"></span>
+        <span style="font-size:12px">${p.name}</span>
+        ${p.isAsset?'<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(99,112,255,.12);color:var(--ac)">Asset</span>':''}
+      </div>
+      <div style="text-align:right">
+        <div class="mono" style="font-size:12px">${fEUR(v)}</div>
+        ${i>0?`<div style="font-size:10px;color:var(--mu2)">+${fEUR(i)} this month</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('entry-summary').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="background:var(--sf2s);border-radius:10px;padding:12px 14px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">Month</div>
+        <div style="font-size:14px;font-weight:600">${month}</div>
+        <div style="font-size:10px;color:var(--mu2)">${date}</div>
+      </div>
+      <div style="background:var(--sf2s);border-radius:10px;padding:12px 14px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">Portfolio Total</div>
+        <div class="mono" style="font-size:16px;font-weight:500;color:var(--ac)">${fEUR(platTotal)}</div>
+        <div style="font-size:10px;color:${change>=0?'var(--gn)':'var(--rd)'}">${change>=0?'+':''}${fEUR(change)} (${changePct>=0?'+':''}${changePct.toFixed(1)}%)</div>
+      </div>
+      <div style="background:var(--sf2s);border-radius:10px;padding:12px 14px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:4px">Savings Rate</div>
+        <div class="mono" style="font-size:16px;font-weight:500;color:var(--am)">${savings}%</div>
+        <div style="font-size:10px;color:var(--mu2)">invested ${fEUR(inv)}</div>
+      </div>
+    </div>
+    ${incRows?`<div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:6px">Income</div>${incRows}`:''}
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin:12px 0 6px">Platforms & Assets</div>
+    ${platRows||'<div style="font-size:12px;color:var(--mu2)">No values entered.</div>'}
+    ${note?`<div style="margin-top:10px;padding:9px 12px;background:var(--sf2s);border-radius:8px;font-size:12px;color:var(--mu2)">💬 ${note}</div>`:''}
+  `;
+}
+
+
+
+// ═══════════════════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════════════════
+let obMode = null; // 'sample' or 'fresh'
+
+function checkOnboarding(){
+  // Demo always shows onboarding (no localStorage)
+  showOnboarding();
+}
+
+function showOnboarding(){
+  document.getElementById('onboarding').style.display='block';
+  obNext(1);
+}
+
+function obNext(step){
+  [1,2,3,4].forEach(s=>{
+    const el=document.getElementById('ob-step-'+s);
+    if(el) el.style.display = s===step?'block':'none';
+  });
+}
+
+function obSelectMode(mode){
+  obMode=mode;
+  const sample=document.getElementById('ob-sample-card');
+  const fresh=document.getElementById('ob-fresh-card');
+  if(sample) sample.style.borderColor=mode==='sample'?'var(--ac)':'var(--bd)';
+  if(fresh) fresh.style.borderColor=mode==='fresh'?'var(--ac)':'var(--bd)';
+  const btn=document.getElementById('ob-mode-btn');
+  if(btn){btn.disabled=false;btn.textContent=mode==='sample'?'Load sample data →':'Set up from scratch →';}
+}
+
+function obConfirmMode(){
+  if(!obMode)return;
+  const name=document.getElementById('ob-name')?.value.trim()||'';
+  const age=parseInt(document.getElementById('ob-age')?.value)||30;
+  OPTS.name=name; OPTS.age=age;
+  if(obMode==='sample'){
+    DB=getDefaultDB();
+    // CFG already has sample data
+    const doneTitle=document.getElementById('ob-done-title');
+    const doneSub=document.getElementById('ob-done-sub');
+    if(doneTitle) doneTitle.textContent=name?`Welcome, ${name}!`:'All set!';
+    if(doneSub) doneSub.textContent='Sample data loaded. Explore the dashboard, future projections and holdings tracker.';
+    obNext(4);
+  } else {
+    // Fresh — clear DB and CFG platforms, keep categories
+    DB={entries:[]};
+    CFG.platforms=[];
+    CFG.goals=[];
+    obNext(3);
+  }
+}
+
+function obAddPlatform(){
+  const name=document.getElementById('ob-plat-name')?.value.trim();
+  const cat=document.getElementById('ob-plat-cat')?.value||'Savings';
+  if(!name){toast('Please enter a platform name',true);return;}
+  const id=name.toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,20);
+  const colors={Stocks:'#5b8fff',Crypto:'#ffb547',Savings:'#00bcd4'};
+  CFG.platforms.push({id,name,cat,color:colors[cat]||'#6370ff',active:true});
+  const doneTitle=document.getElementById('ob-done-title');
+  const doneSub=document.getElementById('ob-done-sub');
+  if(doneTitle) doneTitle.textContent=OPTS.name?`Welcome, ${OPTS.name}!`:'All set!';
+  if(doneSub) doneSub.textContent=`${name} added. You can add more platforms and assets in Options. Start with your first monthly entry.`;
+  obNext(4);
+}
+
+function obFinish(){
+  document.getElementById('onboarding').style.display='none';
+  renderAll();buildPlatGrid(null);buildPlatList();buildManagers();populateGoalSelect();applyLang();
+  if(OPTS.name){const dt=document.getElementById('dash-title');if(dt)dt.textContent=`${OPTS.name}'s Portfolio`;}
+}
+
+
 </script>
+
+<!-- ONBOARDING -->
+<div id="onboarding" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:100;overflow-y:auto;padding:24px 20px">
+  <div style="max-width:480px;margin:0 auto">
+
+    <!-- Step 1: Welcome -->
+    <div id="ob-step-1">
+      <div style="text-align:center;padding:32px 0 24px">
+        <div style="font-size:48px;margin-bottom:16px">🌱</div>
+        <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">Welcome to Vestia</div>
+        <div style="font-size:13px;color:var(--mu2);line-height:1.6">Your portfolio. Every platform. One place.<br>Track investments, savings and assets — all in one place.</div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="field"><label>Your name (optional)</label><input type="text" id="ob-name" placeholder="e.g. Alex" style="font-size:15px;padding:12px 14px"></div>
+          <div class="field"><label>Your age</label><input type="number" id="ob-age" placeholder="e.g. 32" value="30" style="font-size:15px;padding:12px 14px"></div>
+        </div>
+      </div>
+      <button class="btn" style="width:100%;padding:14px;font-size:15px" onclick="obNext(2)">Get started →</button>
+    </div>
+
+    <!-- Step 2: Sample data or fresh -->
+    <div id="ob-step-2" style="display:none">
+      <div style="text-align:center;padding:24px 0 20px">
+        <div style="font-size:36px;margin-bottom:12px">📊</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px">How do you want to start?</div>
+        <div style="font-size:12px;color:var(--mu2)">You can always change this later.</div>
+      </div>
+      <div id="ob-sample-card" onclick="obSelectMode('sample')" style="cursor:pointer;border:2px solid var(--bd);border-radius:14px;padding:18px 20px;margin-bottom:12px;transition:all .2s">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+          <span style="font-size:24px">🎯</span>
+          <div style="font-size:14px;font-weight:700">Start with sample data</div>
+        </div>
+        <div style="font-size:12px;color:var(--mu2);line-height:1.5;margin-left:36px">See the app with example platforms, assets and 6 months of entries. Perfect for exploring all features.</div>
+      </div>
+      <div id="ob-fresh-card" onclick="obSelectMode('fresh')" style="cursor:pointer;border:2px solid var(--bd);border-radius:14px;padding:18px 20px;margin-bottom:20px;transition:all .2s">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+          <span style="font-size:24px">✨</span>
+          <div style="font-size:14px;font-weight:700">Start fresh</div>
+        </div>
+        <div style="font-size:12px;color:var(--mu2);line-height:1.5;margin-left:36px">Set up your own platforms and assets from scratch. Takes 2 minutes.</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-ghost" style="flex:1;padding:12px" onclick="obNext(1)">← Back</button>
+        <button class="btn" style="flex:2;padding:12px;font-size:14px" id="ob-mode-btn" onclick="obConfirmMode()" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Fresh setup - add platform -->
+    <div id="ob-step-3" style="display:none">
+      <div style="text-align:center;padding:24px 0 20px">
+        <div style="font-size:36px;margin-bottom:12px">🏦</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px">Add your first platform</div>
+        <div style="font-size:12px;color:var(--mu2)">A platform is where you hold money — broker, bank, wallet.</div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="field"><label>Platform name</label><input type="text" id="ob-plat-name" placeholder="e.g. DEGIRO, Revolut, Kraken" style="font-size:14px;padding:11px 13px"></div>
+          <div class="field"><label>Category</label>
+            <select id="ob-plat-cat" style="font-size:14px;padding:11px 13px">
+              <option value="Stocks">Stocks</option>
+              <option value="Crypto">Crypto</option>
+              <option value="Savings" selected>Savings</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-ghost" style="flex:1;padding:12px" onclick="obNext(2)">← Back</button>
+        <button class="btn" style="flex:2;padding:12px;font-size:14px" onclick="obAddPlatform()">Add Platform →</button>
+      </div>
+      <button style="background:none;border:none;color:var(--mu2);font-size:12px;cursor:pointer;width:100%;margin-top:12px;padding:8px" onclick="obFinish()">Skip for now →</button>
+    </div>
+
+    <!-- Step 4: Done -->
+    <div id="ob-step-4" style="display:none">
+      <div style="text-align:center;padding:40px 0">
+        <div style="font-size:56px;margin-bottom:16px">🎉</div>
+        <div style="font-size:22px;font-weight:800;margin-bottom:8px" id="ob-done-title">You're all set!</div>
+        <div style="font-size:13px;color:var(--mu2);line-height:1.6;margin-bottom:32px" id="ob-done-sub">Your portfolio tracker is ready. Start by adding your first monthly entry.</div>
+        <button class="btn" style="padding:14px 32px;font-size:15px" onclick="obFinish()">Open Vestia →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>
